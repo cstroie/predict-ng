@@ -1,3 +1,52 @@
+Release 3.0 (predict-ng):
+By Costin Stroie, YO3JAZ <yo3jaz@eridu.eu.org> (04-May-2026):
+
+* Project renamed to predict-ng to reflect the modernization effort
+  while preserving continuity with the original PREDICT by KD2BD.
+
+* Replaced the old installer.c / build / configure approach with a
+  standard autoconf-style ./configure script that detects dependencies
+  and generates the Makefile. No longer requires root to run configure.
+
+* Eliminated the generated predict.h header file. Version, data
+  directory path, and soundcard flag are now injected as compile-time
+  -D macros, making the binary relocatable.
+
+* Added make install, make uninstall, make clean, and make distclean
+  targets. Install uses proper file copies (not symlinks).
+
+* Vocalizer is now disabled by default. Use --enable-vocalizer to
+  build it (requires /dev/dsp). Fully integrated into the Makefile
+  (build, install, uninstall, clean).
+
+* Removed obsolete scripts: build, clean, uninstall, xpredict.
+
+* Changed longitude convention from West-positive to East-positive
+  (standard geographic convention). Ground station longitude is now
+  stored and entered as degrees East; negative values for West.
+  The -east command-line switch is no longer needed for standard use;
+  -west is available to display in degrees West.
+
+* kepupdate rewritten and moved to project root. Now fetches TLE data
+  from the current Celestrak GP API (https://celestrak.org/NORAD/
+  elements/gp.php) for the amateur, visual, weather, and stations
+  groups, merges each into ~/.predict/predict.tle via predict -u,
+  and sends SIGHUP to any running predict instance to trigger a live
+  reload. Installed via make install.
+
+* Added SIGHUP signal handling to predict.c. A running predict
+  instance reloads its orbital and ground station data in response
+  to SIGHUP, without restarting.
+
+* Man page (predict.1) updated: longitude convention, removed xpredict
+  references, updated Celestrak URLs, documented kepupdate, updated
+  authors section.
+
+* Added AUTHORS file listing all contributors.
+
+* Added .gitignore.
+
+----------------------------------------------------------------------------
 Release 2.2.5:
 By John A. Magliacane <kd2bd@amsat.org> (05-May-2018):
 

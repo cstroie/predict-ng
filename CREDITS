@@ -1,18 +1,31 @@
-			***********************
-			*  Credits  (predict-ng)
-			***********************
+			================================
+			Credits for predict-ng
+			================================
 
-predict-ng is a modernized continuation of PREDICT by John A. Magliacane,
-KD2BD. The credits below are for the original PREDICT project.
+predict-ng is a modernized continuation of PREDICT, originally written
+by John A. Magliacane, KD2BD <kd2bd@amsat.org>.
+
+predict-ng modernization (v3.0) by Costin Stroie, YO3JAZ
+<yo3jaz@eridu.eu.org>, May 2026:
+  - Replaced installer.c with a standard ./configure + Makefile build
+  - Eliminated generated predict.h in favour of compile-time -D macros
+  - Changed longitude convention to East-positive (standard)
+  - Rewrote kepupdate for current Celestrak GP API
+  - Added SIGHUP live reload of orbital data
+  - Integrated vocalizer fully into the build system
+  - Updated man page, README, AUTHORS, CHANGES
 
 
-SGP4/SDP4 models and sun/moon position algorithms used in this
-version of PREDICT were derived from "satcom-08", written by
-Neoklis Kyriazis, 5B4AZ, and released in 2002 under the GNU
-General Public License.  Parts of "satcom-08" were derived
-through a translation into 'C' of SGP4 and SDP4 code written
-originally in FORTRAN and Pascal by Dr. T.S. Kelso.  Dr. Kelso's
-code is available on his web site at http://www.celestrak.com/.
+			================================
+			Credits for the original PREDICT
+			================================
+
+SGP4/SDP4 models and sun/moon position algorithms were derived from
+"satcom-08" written by Neoklis Kyriazis, 5B4AZ, released in 2002 under
+the GNU General Public License.  Parts of "satcom-08" were derived
+through a translation into C of SGP4 and SDP4 code written originally
+in FORTRAN and Pascal by Dr. T.S. Kelso.  Dr. Kelso's code is available
+at https://celestrak.org/.
 
 Socket-based server code and the "map" client application were
 contributed by Ivan Galysh, KD4HBO on 10-Jan-2000.
@@ -28,26 +41,28 @@ Parry, W9IF.
 The WinPredictClient was contributed by Steve Fraser, VK5ASF.
 
 The concept of using "xearth" as a graphical display for PREDICT
-was originally conceived by Wade Hampton (that later developed
-into "earthtrack").
-
-Many others have contributed code to the project, including
-Bent Bagger OZ6BL, Tom Busch WB8WOR, Steve Fraser VK5ASF,
-Xavier Crehueras, EB3CZS, Takeshi-Okazaki (Satellite Engineer
-for MTSAT-1R (HIMAWARI 6)), and others.
+was originally conceived by Wade Hampton (later developed into
+"earthtrack").
 
 Calculations for squint angle were adopted from trk-0.4.1 by Lapo
 Pieri, IK5NAX.
 
-Joeal Subash contributed code for the new "QuickDoppler" feature.
+The QuickDoppler feature was contributed by Joeal Subash.
 
-PREDICT is also the product of many others who have contributed
-bug reports, bug fixes, helpful suggestions, and positive support.
+Many others have contributed code, bug reports, bug fixes, and
+suggestions, including Bent Bagger OZ6BL, Tom Busch WB8WOR,
+Steve Fraser VK5ASF, Xavier Crehueras EB3CZS, and Takeshi Okazaki
+(Satellite Engineer for MTSAT-1R / HIMAWARI 6).
 
 
 --
 John A. Magliacane, KD2BD
-Lead Developer
+Original Author
 kd2bd@amsat.org
 May 2018
 
+--
+Costin Stroie, YO3JAZ
+predict-ng Maintainer
+yo3jaz@eridu.eu.org
+May 2026
