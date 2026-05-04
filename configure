@@ -90,8 +90,10 @@ if [ "$SOUNDCARD" = "1" ]; then
     VOCALIZER_RULE="vocalizer/vocalizer"
     VOCALIZER_CLEAN="	rm -f vocalizer/vocalizer"
     VOCALIZER_INSTALL="	install -m 755 vocalizer/vocalizer \$(PREFIX)/bin/vocalizer
-	cp -r vocalizer/*.wav \$(DATADIR)vocalizer/"
-    VOCALIZER_UNINSTALL="	rm -f \$(PREFIX)/bin/vocalizer"
+	install -d \$(DATADIR)vocalizer
+	install -m 644 vocalizer/*.wav \$(DATADIR)vocalizer/"
+    VOCALIZER_UNINSTALL="	rm -f \$(PREFIX)/bin/vocalizer
+	rm -rf \$(DATADIR)vocalizer"
 fi
 
 cat > Makefile <<EOF
