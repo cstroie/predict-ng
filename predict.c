@@ -35,6 +35,7 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <signal.h>
+#include <sys/stat.h>
 
 #ifndef VERSION
 #define VERSION "unknown"
@@ -2066,7 +2067,7 @@ char *predict_name;
 	/* Open a socket port at "predict" or netport if defined */
 
 	if (netport[0]==0)
-		strncpy(netport,"predict",7);
+		strncpy(netport,"predict",8);
 
 	sock=passivesock(netport,"udp",10);
  	alen=sizeof(fsin);
@@ -5861,8 +5862,6 @@ void ProgramInfo()
 
 void NewUser()
 {
-	int *mkdir();
-
 	Banner();
 	attrset(COLOR_PAIR(3)|A_BOLD);
 
