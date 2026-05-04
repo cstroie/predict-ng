@@ -123,14 +123,14 @@ vocalizer/vocalizer: vocalizer/vocalizer.c vocalizer/vocalizer.h
 install: all
 	install -d \$(PREFIX)/bin
 	install -m 755 predict \$(PREFIX)/bin/predict
-	install -m 755 xpredict \$(PREFIX)/bin/xpredict
+	install -m 755 kepupdate \$(PREFIX)/bin/kepupdate
 	install -d \$(PREFIX)/share/man/man1
 	install -m 644 docs/man/predict.1 \$(PREFIX)/share/man/man1/predict.1
 ${VOCALIZER_INSTALL}
 
 uninstall:
 	rm -f \$(PREFIX)/bin/predict
-	rm -f \$(PREFIX)/bin/xpredict
+	rm -f \$(PREFIX)/bin/kepupdate
 	rm -f \$(PREFIX)/bin/kep_update
 	rm -f \$(PREFIX)/bin/earthtrack
 	rm -f \$(PREFIX)/bin/earthtrack2

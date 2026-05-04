@@ -1,0 +1,60 @@
+#!/bin/bash
+# kepupdate - fetch current TLE data from Celestrak, merge into
+# ~/.predict/predict.tle via 'predict -u', then signal a running
+# predict instance to reload.
+#
+# Usage: kepupdate [--no-reload]
+#   --no-reload   Update TLE files but do not signal predict
+
+set -e
+
+PREDICT_DIR="${HOME}/.predict"
+PREDICT="${PREDICT:-predict}"
+BASE_URL="https://celestrak.org/NORAD/elements/gp.php"
+RELOAD=1
+
+for arg in "$@"; do
+    case "$arg" in
+        --no-reload) RELOAD=0 ;;
+        --help)
+            echo "Usage: kepupdate [--no-reload]"
+            exit 0 ;;
+        *) echo "Unknown option: $arg" >&2; exit 1 ;;
+    esac
+done
+
+if [ ! -d "$PREDICT_DIR" ]; then
+    echo "kepupdate: config directory $PREDICT_DIR not found" >&2
+    exit 1
+fi
+
+TMPDIR="$(mktemp -d)"
+trap 'rm -rf "$TMPDIR"' EXIT
+
+fetch_and_merge() {
+    local group="$1"
+    local dest="$TMPDIR/${group}.tle"
+    echo "Fetching ${group}..."
+    if wget -q "${BASE_URL}?GROUP=${group}&FORMAT=tle" -O "$dest" && [ -s "$dest" ]; then
+        "$PREDICT" -u "$dest"
+    else
+        echo "kepupdate: failed to fetch group '${group}'" >&2
+    fi
+}
+
+fetch_and_merge amateur
+fetch_and_merge visual
+fetch_and_merge weather
+fetch_and_merge stations
+
+echo "predict.tle updated in ${PREDICT_DIR}/"
+
+if [ "$RELOAD" = "1" ]; then
+    PID="$(pgrep -x predict 2>/dev/null || true)"
+    if [ -n "$PID" ]; then
+        kill -HUP "$PID"
+        echo "Sent SIGHUP to predict (PID $PID)"
+    else
+        echo "predict is not running; skipping reload"
+    fi
+fi

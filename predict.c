@@ -34,6 +34,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <signal.h>
 
 #include "predict.h"
 
@@ -175,6 +176,13 @@ char	qthfile[50], tlefile[50], dbfile[50], temp[80], output[25],
 	serial_port[15], resave=0, reload_tle=0, netport[7],
 	once_per_second=0, ephem[5], sat_sun_status, findsun,
 	calc_squint, database=0, xterm, io_lat='N', io_lon='W';
+
+volatile sig_atomic_t sighup_received=0;
+
+void handle_sighup(int sig)
+{
+	sighup_received=1;
+}
 
 int	indx, antfd, iaz, iel, ma256, isplat, isplong, socket_flag=0,
 	Flags=0;
@@ -6404,6 +6412,8 @@ char argc, *argv[];
 			fclose(db);
 	}
 
+	signal(SIGHUP, handle_sighup);
+
 	x=ReadDataFiles();
 
 	if (x>1)  /* TLE file was loaded successfully */
@@ -6569,8 +6579,15 @@ char argc, *argv[];
 		MainMenu();
 
 		do
-		{	
+		{
 			key=getch();
+
+			if (sighup_received)
+			{
+				sighup_received=0;
+				ReadDataFiles();
+				MainMenu();
+			}
 
 			if (key!='T')
 				key=tolower(key);
