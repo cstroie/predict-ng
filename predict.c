@@ -5690,10 +5690,9 @@ void MultiTrack()
 
   xo = (COLS > 80) ? (COLS - 80) / 2 : 0;
 
-  mvhline(0, 0, ' ', COLS);
+  PrepareHeader();
   mvprintw(1, 19 + xo, "predict-ng: Real-Time Multi-Tracking Mode");
   mvprintw(2, 20 + xo, "Current Date/Time:");
-  mvhline(3, 0, ' ', COLS);
 
   attrset(COLOR_PAIR(2) | A_BOLD);
 
