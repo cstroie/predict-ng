@@ -1,4 +1,4 @@
-.TH PREDICT 1 "04 May 2026" "KD2BD Software" "KD2BD Software"
+.TH PREDICT-NG 1 "04 May 2026" "predict-ng" "predict-ng"
 .SH NAME
 predict \- Track and predict passes of satellites in Earth orbit
 
@@ -12,17 +12,18 @@ predict [-u \fItle_update_source\fP] [-t \fItlefile\fP]
 [-o \fIoutput_file\fP] [-s] [-east] [-west] [-north] [-south]
 
 .SH DESCRIPTION
-\fBPREDICT\fP is a multi-user satellite tracking and orbital prediction
-program written under the Linux operating system by John A. Magliacane,
-KD2BD. \fBPREDICT\fP is free software. You can redistribute it and/or
-modify it under the terms of the GNU General Public License as published
-by the Free Software Foundation, either version 2 of the License or any
-later version.
+\fBpredict-ng\fP is a modernized continuation of John A. Magliacane's
+(KD2BD) classic \fBPREDICT\fP satellite tracking and orbital prediction
+program. It is a multi-user program written for Linux. \fBpredict-ng\fP
+is free software. You can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free
+Software Foundation, either version 2 of the License or any later
+version.
 
-\fBPREDICT\fP is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
-for more details.
+\fBpredict-ng\fP is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY, without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
 .SH FIRST TIME USE
 \fBPREDICT\fP tracks and predicts passes of satellites based on the
@@ -705,7 +706,7 @@ Detailed information on the operation of \fBPREDICT's\fP UDP socket-based
 interface as well as sample code for writing your own client applications
 is available in the \fIpredict/clients/samples\fP subdirectory.  The latest
 news is available through the official \fBPREDICT\fP software web page
-located at: <https://github.com/kd2bd/predict>.
+located at: <https://github.com/yo3jaz/predict-ng>.
 .SH FILES
 .TP
 \fC~/.predict/predict.tle\fR
@@ -718,11 +719,14 @@ Satellite transponder database file
 Default ground station location information
 
 .SH AUTHORS
-\fBPREDICT\fP was written by John A. Magliacane, KD2BD <kd2bd@amsat.org>.
-The socket server code was contributed by Ivan Galysh, KD4HBO
-<galysh@juno.nrl.navy.mil>.  The PIC/TRACK serial port antenna
-rotator controller code was contributed by Vittorio Benvenuti, I3VFJ
-<benscosm@iol.it>.  SGP4/SDP4 code was derived from Pacsal routines
-written by Dr. T.S. Kelso, and converted to 'C' by Neoklis Kyriazis,
-5B4AZ.  See the CREDITS file for additional information.
+\fBPREDICT\fP was originally written by John A. Magliacane, KD2BD
+<kd2bd@amsat.org>.  The socket server code was contributed by Ivan
+Galysh, KD4HBO.  The PIC/TRACK rotator controller code was contributed
+by Vittorio Benvenuti, I3VFJ.  SGP4/SDP4 code was derived from Pascal
+routines written by Dr. T.S. Kelso, converted to C by Neoklis Kyriazis,
+5B4AZ.
+
+\fBpredict-ng\fP is maintained by Costin Stroie, YO3JAZ
+<yo3jaz@eridu.eu.org>.  See the AUTHORS and CREDITS files for the full
+list of contributors.
 

@@ -159,7 +159,7 @@ EOF
 echo "Generated Makefile"
 
 echo ""
-echo "PREDICT v${VERSION} configured."
+echo "predict-ng v${VERSION} configured."
 echo "  Prefix:  ${PREFIX}"
 echo "  Data:    ${DATADIR}"
 if [ "$SOUNDCARD" = "1" ]; then

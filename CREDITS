@@ -1,6 +1,10 @@
-			*************
-			*  Credits  *
-			*************
+			***********************
+			*  Credits  (predict-ng)
+			***********************
+
+predict-ng is a modernized continuation of PREDICT by John A. Magliacane,
+KD2BD. The credits below are for the original PREDICT project.
+
 
 SGP4/SDP4 models and sun/moon position algorithms used in this
 version of PREDICT were derived from "satcom-08", written by
