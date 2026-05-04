@@ -622,7 +622,7 @@ double Delta_ET(double year)
   /* This function is based on a least squares fit of data from 1950 */
   /* to 1991 and will need to be updated periodically. */
 
-  /* Values determined using data from 1950-1991 in the 1990 
+  /* Values determined using data from 1950-1991 in the 1990
      Astronomical Almanac.  See DELTA_ET.WQ1 for details. */
 
   double delta_et;
@@ -5218,10 +5218,10 @@ char speak;
 
   attrset(COLOR_PAIR(6) | A_BOLD);
 
-  mvhline(0, 0, ' ', 80);
-  mvprintw(1, 1, "predict-ng: Real-Time Satellite Tracking");
-  mvprintw(2, 1, "Tracking: %-10s", Abbreviate(sat[x].name, 9));
-  mvhline(3, 0, ' ', 80);
+  for (int i = 0; i < 4; i++)
+    mvhline(i, 0, ' ', COLS);
+  mvprintw(1, 21 + xo, "predict-ng: Real-Time Satellite Tracking");
+  mvprintw(2, 20 + xo, "Tracking: %-10s", Abbreviate(sat[x].name, 9));
 
   attrset(COLOR_PAIR(4) | A_BOLD);
 
@@ -5252,7 +5252,7 @@ char speak;
   do {
     attrset(COLOR_PAIR(6) | A_BOLD);
     daynum = CurrentDaynum();
-    mvprintw(2, 42, "%s", Daynum2String(daynum));
+    mvprintw(2, 42 + xo, "%s", Daynum2String(daynum));
     attrset(COLOR_PAIR(2) | A_BOLD);
     Calc();
 
@@ -5642,7 +5642,7 @@ char speak;
       }
 
       length = strlen(sat_db[x].transponder_name[xponder]) / 2;
-      mvprintw(10, 40 - length, "%s", sat_db[x].transponder_name[xponder]);
+      mvprintw(10, 40 - length + xo, "%s", sat_db[x].transponder_name[xponder]);
     }
 
     refresh();
@@ -6507,7 +6507,7 @@ int QuickDoppler100(string, outputfile)
 char *string, *outputfile;
 {
 
-  /* Do a quick predict of the doppler for non-geo sattelites, returns UTC epoch seconds, 
+  /* Do a quick predict of the doppler for non-geo sattelites, returns UTC epoch seconds,
      UTC time and doppler normalized to 100MHz for every 5 seconds of satellite-pass as a CSV */
 
   int x, y, z, lastel = 0;
