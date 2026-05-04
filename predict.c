@@ -5677,17 +5677,17 @@ void MultiTrack()
   attrset(COLOR_PAIR(6) | A_BOLD);
   clear();
 
-  mvhline(0, 0, ' ', 80);
-  mvprintw(1, 1, "predict-ng: Real-Time Multi-Tracking Mode");
-  mvprintw(2, 1, "Current Date/Time:");
-  mvhline(3, 0, ' ', 80);
-
   xo = (COLS > 80) ? (COLS - 80) / 2 : 0;
+
+  mvhline(0, 0, ' ', COLS);
+  mvprintw(1, 19 + xo, "predict-ng: Real-Time Multi-Tracking Mode");
+  mvprintw(2, 20 + xo, "Current Date/Time:");
+  mvhline(3, 0, ' ', COLS);
 
   attrset(COLOR_PAIR(2) | A_BOLD);
 
-  mvprintw(4, xo,
-           " Satellite  Az   El %s  %s  Range  | Satellite  Az   El %s  %s  Range   ",
+  mvprintw(4, 1 + xo,
+           "Satellite  Az   El %s  %s  Range  | Satellite  Az   El %s  %s  Range   ",
            (io_lat == 'N' ? "LatN" : "LatS"),
            (io_lon == 'W' ? "LonW" : "LonE"),
            (io_lat == 'N' ? "LatN" : "LatS"),
@@ -5745,7 +5745,7 @@ void MultiTrack()
         else
           sunstat = 'N';
 
-        mvprintw(y + 6, x,
+        mvprintw(y + 6, x + xo,
                  "%-10s%3.0f  %+3.0f  %3.0f   %3.0f %6.0f %c",
                  Abbreviate(sat[indx].name, 9), sat_azi, sat_ele,
                  (io_lat == 'N' ? +1 : -1) * sat_lat,
