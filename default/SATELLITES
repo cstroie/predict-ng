@@ -1,0 +1,127 @@
+Satellite list for predict.tle / predict.db
+TLE epoch: 2026-05-04  (source: Celestrak)
+
+24 satellites in 4 categories.
+
+================================================================================
+SPACE STATIONS & TELESCOPES
+================================================================================
+
+ISS (ZARYA)         NORAD 25544   i=51.6   LEO ~420 km
+  International Space Station. Continuously crewed since 2000.
+  ARISS APRS digipeater: 145.825 MHz (uplink & downlink)
+  Voice downlink: 145.800 MHz  (uplink: 144.490 R2/3, 145.200 R1)
+  Crossband repeater: uplink 437.800 MHz, downlink 145.800 MHz
+
+CSS (TIANHE)        NORAD 48274   i=41.5   LEO ~390 km
+  Chinese Space Station (Tiangong). Core module launched 2021.
+  APRS digipeater: 437.525 MHz
+  Voice: 437.550 MHz
+
+HST                 NORAD 20580   i=28.5   LEO ~537 km
+  Hubble Space Telescope. Launched 1990, still operational.
+
+================================================================================
+WEATHER SATELLITES (best SDR-receivable)
+================================================================================
+
+NOAA 20 (JPSS-1)    NORAD 43013   i=98.8   LEO ~824 km
+  US polar weather. ATMS/VIIRS/CrIS instruments. Launched 2017.
+  HRPT downlink: 1698.0 MHz
+
+NOAA 21 (JPSS-2)    NORAD 54234   i=98.7   LEO ~833 km
+  US polar weather. Launched 2022.
+  HRPT downlink: 1698.0 MHz
+
+METOP-C             NORAD 43689   i=98.7   LEO ~817 km
+  European (EUMETSAT) polar weather. Launched 2018.
+  AHRPT downlink: 1701.3 MHz
+  LRPT downlink: 137.100 MHz  (decodable with SDR + SatDump/METEOR-Decoder)
+
+METEOR-M2 3         NORAD 57166   i=98.6   LEO ~825 km
+  Russian polar weather. Launched 2023.
+  LRPT downlink: 137.900 MHz  (QPSK, decodable with SDR)
+
+METEOR-M2 4         NORAD 59051   i=98.7   LEO ~825 km
+  Russian polar weather. Launched 2024.
+  LRPT downlink: 137.900 MHz  (QPSK, decodable with SDR)
+
+GOES 16             NORAD 41866   GEO 75.2 W
+  US NOAA geostationary East. Full-disk imagery every 10 min.
+  HRIT/EMWIN downlink: 1694.1 MHz
+
+================================================================================
+AMATEUR RADIO SATELLITES
+================================================================================
+
+OSCAR 7 (AO-7)      NORAD 07530   i=102.0  LEO ~1460 km
+  Launched 1974 — oldest working amateur satellite.
+  Mode A (inverted): uplink 145.850-145.950 MHz, downlink 29.400-29.500 MHz
+  Mode B (inverted): uplink 432.125-432.175 MHz, downlink 145.925-145.975 MHz
+  CW beacon: 145.975 MHz / 29.502 MHz
+
+PHASE 3B (AO-10)    NORAD 14129   i=25.9   HEO  (apogee ~35000 km)
+  Highly elliptical orbit. Launched 1983.
+  Mode B transponder (inverted): uplink 435.030-435.180 MHz, downlink 145.825-145.975 MHz
+  CW beacon: 145.810 MHz  (status: intermittent, tumbling)
+
+UOSAT 2 (UO-11)     NORAD 14781   i=97.8   LEO ~680 km
+  Launched 1984, University of Surrey. Beacon/telemetry.
+  VHF beacon: 145.826 MHz
+  UHF engineering beacon: 435.025 MHz
+
+LUSAT (LO-19)       NORAD 20442   i=98.9   LEO ~795 km
+  Argentine AMSAT. Launched 1990.
+  CW beacon: 437.1245 MHz
+
+EYESAT A (AO-27)    NORAD 22825   i=98.7   LEO ~800 km
+  FM repeater. Launched 1993.
+  Uplink: 145.850 MHz, downlink: 436.795 MHz
+
+RADIO ROSTO (RS-15) NORAD 23439   i=64.8   LEO ~1900 km
+  Russian linear transponder. Launched 1994.
+  Mode A (inverted): uplink 145.858-145.898 MHz, downlink 29.354-29.394 MHz
+  CW beacon: 29.352 MHz
+
+JAS-2 (FO-29)       NORAD 24278   i=98.5   LEO ~800 km
+  Japanese JARL. Linear transponder (inverted SSB/CW). Launched 1996.
+  Uplink: 145.900-146.000 MHz, downlink: 435.800-435.900 MHz
+  CW beacon: 435.795 MHz
+
+SAUDISAT 1C (SO-50) NORAD 27607   i=64.6   LEO ~670 km
+  FM repeater. Launched 2002. Very popular for handheld contacts.
+  Uplink: 145.850 MHz (67.0 Hz PL tone required), downlink: 436.795 MHz
+
+FUNCUBE-1 (AO-73)   NORAD 39444   i=97.8   LEO ~585 km
+  Educational linear transponder (inverted SSB). Launched 2013.
+  Uplink: 435.130-435.150 MHz, downlink: 145.950-145.970 MHz
+  Telemetry beacon: 145.935 MHz
+
+ES'HAIL 2           NORAD 43700   GEO 25.9 E
+  Qatar OSCAR-100. First geostationary amateur satellite. Launched 2018.
+  Narrowband transponder (inverted): uplink 2400.050-2400.300 MHz,
+    downlink 10489.550-10489.800 MHz
+  Wideband DVB-S2: uplink 2401.500 MHz, downlink 10491.000 MHz
+
+RADFXSAT (AO-91)    NORAD 43017   i=97.5   LEO ~680 km
+  Fox-1B FM repeater. Vanderbilt Univ / AMSAT. Launched 2017.
+  Uplink: 435.250 MHz, downlink: 145.960 MHz
+
+RS-44               NORAD 44909   i=82.5   LEO ~1900 km
+  Russian linear transponder (inverted SSB). Launched 2019.
+  Uplink: 435.640-435.660 MHz, downlink: 145.935-145.955 MHz
+  CW beacon: 145.935 MHz
+
+XW-3 (CAS-9)        NORAD 50466   i=98.5   LEO ~786 km
+  Chinese CAMSAT linear transponder (inverted SSB). Launched 2021.
+  Uplink: 435.260-435.280 MHz (USB), downlink: 145.845-145.865 MHz (LSB)
+  CW beacon: 145.840 MHz
+
+GREENCUBE (IO-117)  NORAD 53109   i=70.1   HEO  (apogee ~35000 km)
+  AMSAT-Italy digital store-and-forward. Launched 2022.
+  Uplink/downlink: 435.310 MHz  (GMSK, Dire Wolf / FX.25)
+
+UMKA 1 (RS40S)      NORAD 57172   i=97.5   LEO ~560 km
+  Russian educational cubesat. Launched 2023.
+  FM voice repeater: uplink 145.900 MHz, downlink 437.150 MHz
+  CW beacon: 437.150 MHz
