@@ -200,6 +200,8 @@ int	indx, antfd, iaz, iel, ma256, isplat, isplong, socket_flag=0,
 
 long	rv, irk;
 
+double	min_elevation=0.0;
+
 unsigned char val[256];
 
 /* The following variables are used by the socket server.  They
@@ -6101,7 +6103,7 @@ char *outputfile;
 			los=FindLOS();
 			if (los<=aos) break; /* safety */
 
-			if (aos<limit && npass<(int)(sizeof(passes)/sizeof(passes[0])))
+			if (aos<limit && maxel>=min_elevation && npass<(int)(sizeof(passes)/sizeof(passes[0])))
 			{
 				passes[npass].aos=aos;
 				passes[npass].los=(los<limit?los:limit);
@@ -6208,25 +6210,41 @@ char *string, *outputfile;
 				if (AosHappens(indx) && Geostationary(indx)==0 && Decayed(indx,daynum)==0)
 				{
 					/* Make Predictions */
-					daynum=FindAOS();
+					double aosday, passmax=0.0;
+					aosday=FindAOS();
 
-					/* Display the pass */
-					fprintf(fd,"%-10s %-19s %4s %4s %4s %4s %4s %6s %6s %s %s\n",
-						"Timestamp","UTC Date/Time","El","Az","MA","Lat","Lon","Range","Orbit","Sun","Doppler100");
-
-					while (iel>=0)
+					/* Pre-scan for max elevation */
+					daynum=aosday;
+					Calc();
+					while (sat_ele>=0.0)
 					{
-						fprintf(fd,"%.0f %s %4d %4d %4d %4d %4d %6ld %6ld %c %f\n",floor(86400.0*(3651.0+daynum)),Daynum2String(daynum),iel,iaz,ma256,isplat,isplong,irk,rv,findsun,doppler100);
-						lastel=iel;
+						if (sat_ele>passmax) passmax=sat_ele;
 						daynum+=cos((sat_ele-1.0)*deg2rad)*sqrt(sat_alt)/25000.0;
 						Calc();
 					}
 
-					if (lastel!=0)
+					if (passmax>=min_elevation)
 					{
-						daynum=FindLOS();
+						/* Display the pass */
+						daynum=aosday;
 						Calc();
-						fprintf(fd,"%.0f %s %4d %4d %4d %4d %4d %6ld %6ld %c %f\n",floor(86400.0*(3651.0+daynum)),Daynum2String(daynum),iel,iaz,ma256,isplat,isplong,irk,rv,findsun,doppler100);
+						fprintf(fd,"%-10s %-19s %4s %4s %4s %4s %4s %6s %6s %s %s\n",
+							"Timestamp","UTC Date/Time","El","Az","MA","Lat","Lon","Range","Orbit","Sun","Doppler100");
+
+						while (iel>=0)
+						{
+							fprintf(fd,"%.0f %s %4d %4d %4d %4d %4d %6ld %6ld %c %f\n",floor(86400.0*(3651.0+daynum)),Daynum2String(daynum),iel,iaz,ma256,isplat,isplong,irk,rv,findsun,doppler100);
+							lastel=iel;
+							daynum+=cos((sat_ele-1.0)*deg2rad)*sqrt(sat_alt)/25000.0;
+							Calc();
+						}
+
+						if (lastel!=0)
+						{
+							daynum=FindLOS();
+							Calc();
+							fprintf(fd,"%.0f %s %4d %4d %4d %4d %4d %6ld %6ld %c %f\n",floor(86400.0*(3651.0+daynum)),Daynum2String(daynum),iel,iaz,ma256,isplat,isplong,irk,rv,findsun,doppler100);
+						}
 					}
 				}
 				break;
@@ -6427,6 +6445,13 @@ char argc, *argv[];
 		if (strcmp(argv[x],"-P")==0)
 			quickpasses=1;
 
+		if (strcmp(argv[x],"-e")==0)
+		{
+			z=x+1;
+			if (z<=y && argv[z][0])
+				min_elevation=atof(argv[z]);
+		}
+
 		if (strcmp(argv[x],"-u")==0)
 		{
 			z=x+1;
@@ -6511,6 +6536,7 @@ char argc, *argv[];
 			printf("Non-interactive modes:\n");
 			printf("  -u <file> [...]  Update orbital database from TLE file(s) and exit\n");
 			printf("  -P               List all passes in the next 24h (sorted by AOS)\n");
+			printf("  -e <degrees>     Minimum elevation threshold (default: 0)\n");
 			printf("  -f <sat> <start> [end]  Satellite position(s) at Unix time(s)\n");
 			printf("  -p <sat> [start]        Single-pass orbital prediction\n");
 			printf("  -dp <sat> [start] [end] Quick Doppler prediction (CSV)\n");
