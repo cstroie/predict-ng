@@ -185,7 +185,7 @@ double	tsince, jul_epoch, jul_utc, eclipse_depth=0,
 char	qthfile[50], tlefile[50], dbfile[50], temp[80], output[25],
 	serial_port[15], resave=0, reload_tle=0, netport[7],
 	once_per_second=0, ephem[5], sat_sun_status, findsun,
-	calc_squint, database=0, xterm, io_lat='N', io_lon='W';
+	calc_squint, database=0, xterm, io_lat='N', io_lon='E';
 
 volatile sig_atomic_t sighup_received=0;
 
@@ -2740,7 +2740,7 @@ char ReadDataFiles()
 		fclose(fd);
 
 		obs_geodetic.lat=qth.stnlat*deg2rad;
-		obs_geodetic.lon=-qth.stnlong*deg2rad;
+		obs_geodetic.lon=qth.stnlong*deg2rad;
 		obs_geodetic.alt=((double)qth.stnalt)/1000.0;
 		obs_geodetic.theta=0.0;
 
@@ -3630,7 +3630,7 @@ double daynum;
 	while (teg>360.0)
 		teg-=360.0;
 
-	th=FixAngle((teg-qth.stnlong)*deg2rad);
+	th=FixAngle((teg+qth.stnlong)*deg2rad);
 	h=th-ra;
 
 	az=atan2(sin(h),cos(h)*sin(n)-tan(dec)*cos(n))+pi;
@@ -3850,7 +3850,7 @@ void Calc()
 
 	irk=(long)rint(sat_range);
 	isplat=(int)rint(sat_lat);
-	isplong=(int)rint(360.0-sat_lon);
+	isplong=(int)rint(sat_lon);
 	iaz=(int)rint(sat_azi);
 	iel=(int)rint(sat_ele);
 	ma256=(int)rint(256.0*(phase/twopi));
@@ -4301,10 +4301,10 @@ char mode;
 			{
 				if (calc_squint)
 
-					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %4.0f %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?isplong:360-isplong),irk,squint,findsun);
+					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %4.0f %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?360-isplong:isplong),irk,squint,findsun);
 
 				else
-					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %6ld %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?isplong:360-isplong),irk,rv,findsun);
+					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %6ld %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?360-isplong:isplong),irk,rv,findsun);
 
 				lastel=iel;
 
@@ -4338,10 +4338,10 @@ char mode;
 				Calc();
 
 				if (calc_squint)
-					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %4.0f %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?isplong:360-isplong),irk,squint,findsun);
+					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %4.0f %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?360-isplong:isplong),irk,squint,findsun);
 
 				else
-					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %6ld %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?isplong:360-isplong),irk,rv,findsun);
+					sprintf(string,"      %s%4d %4d  %4d  %4d   %4d   %6ld  %6ld %c\n",Daynum2String(daynum),iel,iaz,ma256,(io_lat=='N'?+1:-1)*isplat,(io_lon=='W'?360-isplong:isplong),irk,rv,findsun);
 
 				if (mode=='p')
 					quit=Print(string,'p');
@@ -4823,9 +4823,9 @@ void QthEdit()
 		mvprintw(12,44,"%g [DegS]",-qth.stnlat);
 
 	if (io_lon=='W')
-		mvprintw(13,44,"%g [DegW]",+qth.stnlong);
+		mvprintw(13,44,"%g [DegW]",-qth.stnlong);
 	else
-		mvprintw(13,44,"%g [DegE]",-qth.stnlong);
+		mvprintw(13,44,"%g [DegE]",+qth.stnlong);
 
 	mvprintw(14,44,"%d [m]",qth.stnalt);
 
@@ -4859,21 +4859,21 @@ void QthEdit()
 	}
  
 	if (io_lon=='W')
-		sprintf(temp,"%g [DegW]",+qth.stnlong);
+		sprintf(temp,"%g [DegW]",-qth.stnlong);
 	else
-		sprintf(temp,"%g [DegE]",-qth.stnlong);
+		sprintf(temp,"%g [DegE]",+qth.stnlong);
  
 	if (io_lon=='W')
-		mvprintw(18,12,"Enter your longitude in degrees WEST   (east=negative) ");
+		mvprintw(18,12,"Enter your longitude in degrees WEST   (east=positive) ");
 	else
-		mvprintw(18,12,"Enter your longitude in degrees EAST   (west=negative) ");
+		mvprintw(18,12,"Enter your longitude in degrees EAST   (west=negative, 0-360 or -180 to 180) ");
  
 	if (KbEdit(45,14))
 	{
 		if (io_lon=='W')
-			qth.stnlong=+ReadBearing(temp);
-		else
 			qth.stnlong=-ReadBearing(temp);
+		else
+			qth.stnlong=+ReadBearing(temp);
 	}
  
 	move(19,12);
@@ -5300,7 +5300,7 @@ char speak;
 			az_array[indx]=sat_azi;
 			el_array[indx]=sat_ele;
 			lat_array[indx]=sat_lat;
-			long_array[indx]=360.0-sat_lon;
+			long_array[indx]=sat_lon;
 			footprint_array[indx]=fk;
 			range_array[indx]=sat_range;
 			altitude_array[indx]=sat_alt;
@@ -5519,7 +5519,7 @@ void MultiTrack()
 					az_array[indx]=sat_azi;
 					el_array[indx]=sat_ele;
 					lat_array[indx]=sat_lat;
-					long_array[indx]=360.0-sat_lon;
+					long_array[indx]=sat_lon;
 					footprint_array[indx]=fk;
 					range_array[indx]=sat_range;
 					altitude_array[indx]=sat_alt;
