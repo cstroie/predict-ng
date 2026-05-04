@@ -110,10 +110,13 @@ DATADIR = ${DATADIR}
 
 .PHONY: all install uninstall clean distclean
 
-all: predict ${VOCALIZER_RULE}
+all: predict predict.1 ${VOCALIZER_RULE}
 
 predict: predict.c
 	\$(CC) \$(CFLAGS) predict.c \$(LIBS) -o predict
+
+predict.1: predict.man
+	groff -T ascii -man predict.man > predict.1
 
 vocalizer/vocalizer: vocalizer/vocalizer.c vocalizer/vocalizer.h
 	\$(CC) \$(CFLAGS) vocalizer/vocalizer.c -o vocalizer/vocalizer
@@ -123,7 +126,7 @@ install: all
 	install -m 755 predict \$(PREFIX)/bin/predict
 	install -m 755 kepupdate \$(PREFIX)/bin/kepupdate
 	install -d \$(PREFIX)/share/man/man1
-	install -m 644 docs/man/predict.1 \$(PREFIX)/share/man/man1/predict.1
+	install -m 644 predict.1 \$(PREFIX)/share/man/man1/predict.1
 	install -d \$(DATADIR)
 	install -m 644 default/predict.tle \$(DATADIR)
 	install -m 644 default/predict.db \$(DATADIR)
@@ -143,7 +146,7 @@ uninstall:
 ${VOCALIZER_UNINSTALL}
 
 clean:
-	rm -f predict vocalizer/vocalizer.h
+	rm -f predict predict.1 vocalizer/vocalizer.h
 ${VOCALIZER_CLEAN}
 
 distclean: clean
