@@ -27,7 +27,10 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/soundcard.h>
-#include "vocalizer.h"
+
+#ifndef VOCALIZERDIR
+#define VOCALIZERDIR "/usr/local/share/predict/vocalizer/"
+#endif
 
 int dsp;
 char numstr[20][10];
@@ -74,7 +77,7 @@ char *filename;
 	unsigned long total_samples=0L, rate=0L, running_total=0L;
 	char filenpath[80];
 
-	strncpy(filenpath,path,79);
+	strncpy(filenpath,VOCALIZERDIR,79);
 	strncat(filenpath,filename,79);
 	strncat(filenpath,".wav",79);
 
