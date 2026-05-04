@@ -36,7 +36,17 @@
 #include <termios.h>
 #include <signal.h>
 
-#include "predict.h"
+#ifndef VERSION
+#define VERSION "unknown"
+#endif
+
+#ifndef DATADIR
+#define DATADIR "/usr/local/share/predict/"
+#endif
+
+#ifndef SOUNDCARD
+#define SOUNDCARD 0
+#endif
 
 /* Constants used by SGP4/SDP4 code */
 
@@ -2209,7 +2219,7 @@ char *predict_name;
 		if (strncmp("GET_VERSION",buf,11)==0)
 		{
 			buff[0]=0;
-			sprintf(buff,"%s\n",version);
+			sprintf(buff,"%s\n",VERSION);
 			sendto(sock,buff,strlen(buff),0,(struct sockaddr *)&fsin,sizeof(fsin));
 			ok=1;
 		}
@@ -2353,7 +2363,7 @@ void Banner()
 
 	attrset(COLOR_PAIR(6)|A_REVERSE|A_BOLD);
 	mvprintw(3,18,"                                           ");
-	mvprintw(4,18,"         --== PREDICT  v%s ==--         ",version);
+	mvprintw(4,18,"         --== PREDICT  v%s ==--         ",VERSION);
 	mvprintw(5,18,"   Released by John A. Magliacane, KD2BD   ");
 	mvprintw(6,18,"                  May 2018                 ");
 	mvprintw(7,18,"                                           ");
@@ -5121,7 +5131,7 @@ char speak;
 					mvprintw(14,67,"              ");
 			}
 
-			if (speak=='T' && soundcard)
+			if (speak=='T' && SOUNDCARD)
 			{
 				if (eclipse_alarm==0 && fabs(eclipse_depth)<0.015) /* ~1 deg */
 				{
@@ -5134,7 +5144,7 @@ char speak;
 
 					if ((old_visibility=='V' || old_visibility=='D') && visibility=='N')
 					{
-						sprintf(command,"%svocalizer/vocalizer eclipse &",predictpath);
+						sprintf(command,"%svocalizer/vocalizer eclipse &",DATADIR);
 						system(command);
 						eclipse_alarm=1;
 						oldtime-=0.000015*sqrt(sat_alt);
@@ -5142,7 +5152,7 @@ char speak;
 
 					if (old_visibility=='N' && (visibility=='V' || visibility=='D'))
 					{
-						sprintf(command,"%svocalizer/vocalizer sunlight &",predictpath);
+						sprintf(command,"%svocalizer/vocalizer sunlight &",DATADIR);
 						system(command);
 						eclipse_alarm=1;
 						oldtime-=0.000015*sqrt(sat_alt);
@@ -5157,7 +5167,7 @@ char speak;
 					if (sat_range_rate>0.0)
 						approaching='-';
 
-					sprintf(command,"%svocalizer/vocalizer %.0f %.0f %c %c &",predictpath,sat_azi,sat_ele,approaching,visibility);
+					sprintf(command,"%svocalizer/vocalizer %.0f %.0f %c %c &",DATADIR,sat_azi,sat_ele,approaching,visibility);
 					system(command);
   					oldtime=CurrentDaynum();
 					old_visibility=visibility;
@@ -5274,11 +5284,11 @@ char speak;
 			mvprintw(22,22,"Next AOS: %s UTC",Daynum2String(nextaos));
 			aoslos=nextaos;
 
-			if (oldtime!=0.0 && speak=='T' && soundcard)
+			if (oldtime!=0.0 && speak=='T' && SOUNDCARD)
 			{
 				/* Announce LOS */
 
-				sprintf(command,"%svocalizer/vocalizer los &",predictpath);
+				sprintf(command,"%svocalizer/vocalizer los &",DATADIR);
 				system(command);
 			}
 		}
@@ -5799,7 +5809,7 @@ void MainMenu()
 	refresh();
 
 	if (xterm)
-		fprintf(stderr,"\033]0;PREDICT: Version %s\007",version); 
+		fprintf(stderr,"\033]0;PREDICT: Version %s\007",VERSION);
 }
 
 void ProgramInfo()
@@ -5807,7 +5817,7 @@ void ProgramInfo()
 	Banner();
 	attrset(COLOR_PAIR(3)|A_BOLD);
 
-	printw("\n\n\n\n\n\t\tPREDICT version : %s\n",version);
+	printw("\n\n\n\n\n\t\tPREDICT version : %s\n",VERSION);
 	printw("\t\tQTH file loaded : %s\n",qthfile);
 	printw("\t\tTLE file loaded : %s\n",tlefile);
 	printw("\t\tDatabase file   : ");
@@ -5839,7 +5849,7 @@ void ProgramInfo()
 
 	printw("\t\tVocalizer       : ");
 
-	if (soundcard)
+	if (SOUNDCARD)
 		printw("Soundcard present");
 	else
 		printw("No soundcard available");
@@ -5870,15 +5880,15 @@ void NewUser()
 
 	/* Copy default files into ~/.predict directory */
 
-	sprintf(temp,"%sdefault/predict.tle",predictpath);
+	sprintf(temp,"%sdefault/predict.tle",DATADIR);
 
 	CopyFile(temp,tlefile);
 
-	sprintf(temp,"%sdefault/predict.db",predictpath);
+	sprintf(temp,"%sdefault/predict.db",DATADIR);
 
 	CopyFile(temp,dbfile);
 
-	sprintf(temp,"%sdefault/predict.qth",predictpath);
+	sprintf(temp,"%sdefault/predict.qth",DATADIR);
 
 	CopyFile(temp,qthfile);
 
@@ -6404,7 +6414,7 @@ char argc, *argv[];
 
 		if (db==NULL)
 		{
-			sprintf(temp,"%sdefault/predict.db",predictpath);
+			sprintf(temp,"%sdefault/predict.db",DATADIR);
 			CopyFile(temp,dbfile);
 		}
 
