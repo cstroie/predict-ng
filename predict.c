@@ -6360,17 +6360,45 @@ char argc, *argv[];
 		if (strcmp(argv[x],"-s")==0)
 			socket_flag=1;
 
-		if (strcmp(argv[x],"-north")==0) /* Default */
+		if (strcmp(argv[x],"-north")==0)
 			io_lat='N';
 
 		if (strcmp(argv[x],"-south")==0)
 			io_lat='S';
 
-		if (strcmp(argv[x],"-west")==0)  /* Default */
+		if (strcmp(argv[x],"-west")==0)
 			io_lon='W';
 
 		if (strcmp(argv[x],"-east")==0)
 			io_lon='E';
+
+		if (strcmp(argv[x],"-h")==0 || strcmp(argv[x],"--help")==0)
+		{
+			printf("predict-ng v%s - satellite tracking and orbital prediction\n\n", VERSION);
+			printf("Usage: predict [options]\n\n");
+			printf("Data files:\n");
+			printf("  -t <tlefile>     Use alternate TLE file\n");
+			printf("  -q <qthfile>     Use alternate QTH file\n\n");
+			printf("Non-interactive modes:\n");
+			printf("  -u <file> [...]  Update orbital database from TLE file(s) and exit\n");
+			printf("  -f <sat> <start> [end]  Satellite position(s) at Unix time(s)\n");
+			printf("  -p <sat> [start]        Single-pass orbital prediction\n");
+			printf("  -dp <sat> [start] [end] Quick Doppler prediction (CSV)\n");
+			printf("  -o <file>        Write -f/-p/-dp output to file\n\n");
+			printf("Server mode:\n");
+			printf("  -s               Start in UDP socket server mode\n");
+			printf("  -n <port>        Use alternate UDP port (default: 1210)\n\n");
+			printf("Antenna rotator:\n");
+			printf("  -a <port>        Send AZ/EL to serial port (on change)\n");
+			printf("  -a1 <port>       Send AZ/EL to serial port (every second)\n\n");
+			printf("Display:\n");
+			printf("  -north/-south    Latitude display (default: north)\n");
+			printf("  -east/-west      Longitude display (default: east)\n\n");
+			printf("  -h, --help       Show this help and exit\n\n");
+			printf("Data files default to ~/.predict/predict.{tle,qth,db}\n");
+			printf("See man predict for full documentation.\n");
+			exit(0);
+		}
 	}
 
 	/* We're done scanning command-line arguments */
