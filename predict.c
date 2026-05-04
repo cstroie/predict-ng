@@ -184,7 +184,7 @@ double	tsince, jul_epoch, jul_utc, eclipse_depth=0,
 	moon_az, moon_el, moon_dx, moon_ra, moon_dec, moon_gha, moon_dv;
 
 char	qthfile[50], tlefile[50], dbfile[50], temp[80], output[25],
-	serial_port[15], resave=0, reload_tle=0, netport[7],
+	serial_port[15], resave=0, reload_tle=0, netport[8],
 	once_per_second=0, ephem[5], sat_sun_status, findsun,
 	calc_squint, database=0, xterm, io_lat='N', io_lon='E';
 
@@ -2366,7 +2366,7 @@ void Banner()
 
 	attrset(COLOR_PAIR(6)|A_BOLD);
 	mvprintw(3,18,"                                           ");
-	mvprintw(4,18,"        --== predict-ng  v%s ==--         ",VERSION);
+	mvprintw(4,18,"       --== predict-ng  v%s ==--        ",VERSION);
 	mvprintw(5,18,"   Original by John A. Magliacane, KD2BD   ");
 	mvprintw(6,18,"     Maintained by Costin Stroie, YO3JAZ   ");
 	mvprintw(7,18,"                                           ");
@@ -2509,8 +2509,7 @@ int x;
 
 	double tempnum;
 
-	strncpy(sat[x].designator,SubString(sat[x].line1,9,16),8);
-	sat[x].designator[9]=0;
+	snprintf(sat[x].designator,9,"%s",SubString(sat[x].line1,9,16));
 	sat[x].catnum=atol(SubString(sat[x].line1,2,6));
 	sat[x].year=atoi(SubString(sat[x].line1,18,19));
 	sat[x].refepoch=atof(SubString(sat[x].line1,20,31));
@@ -2788,9 +2787,9 @@ char ReadDataFiles()
 				
 				/* Copy TLE data into the sat data structure */
 
-				strncpy(sat[x].name,name,24);
-				strncpy(sat[x].line1,line1,69);
-				strncpy(sat[x].line2,line2,69);
+				snprintf(sat[x].name,25,"%s",name);
+				snprintf(sat[x].line1,70,"%s",line1);
+				snprintf(sat[x].line2,70,"%s",line2);
 
 				/* Update individual parameters */
 
@@ -3091,8 +3090,8 @@ char *string;
 					   Copy strings str1 and
 					   str2 into line1 and line2 */
 
-					strncpy(line1,str1,75);
-					strncpy(line2,str2,75);
+					snprintf(line1,76,"%.75s",str1);
+					snprintf(line2,76,"%.75s",str2);
 					kepcount++;
 
 					/* Scan for object number in datafile to see
@@ -3148,8 +3147,8 @@ char *string;
 
 							/* Copy TLE data into the sat data structure */
 
-							strncpy(sat[i].line1,line1,69);
-							strncpy(sat[i].line2,line2,69);
+							snprintf(sat[i].line1,70,"%.69s",line1);
+							snprintf(sat[i].line2,70,"%.69s",line2);
 							InternalUpdate(i);
 						}
 					}
@@ -4562,6 +4561,7 @@ int x,y;
 		need2save=1;  /* Save new data to variables */
 		resave=1;     /* Save new data to disk files */
 		strncpy(temp,input,24);
+		temp[24]=0;
 	}
 
 	mvprintw(y-1,x-1,"%-25s",temp);
@@ -4717,7 +4717,7 @@ void KepEdit()
 			sprintf(temp,"%s",sat[x].name);
 
 			if (KbEdit(43,8))
-				strncpy(sat[x].name,temp,24);
+				snprintf(sat[x].name,25,"%.24s",temp);
 
 			sprintf(temp,"%ld",sat[x].catnum);
 
@@ -4839,7 +4839,7 @@ void QthEdit()
 	mvprintw(18,12,"Enter the callsign or identifier of your ground station");
 
 	if (KbEdit(45,12))
-		strncpy(qth.callsign,temp,16);
+		snprintf(qth.callsign,17,"%.16s",temp);
 
 	if (io_lat=='N')
 		sprintf(temp,"%g [DegN]",+qth.stnlat);
@@ -5885,17 +5885,17 @@ void NewUser()
 
 	/* Copy default files into ~/.predict directory */
 
-	sprintf(temp,"%sdefault/predict.tle",DATADIR);
+	sprintf(temp,"%spredict.tle",DATADIR);
 
 	if (CopyFile(temp,tlefile))
 		printw("\n\n  *** ERROR: Could not copy default TLE file from \"%s\"!", temp);
 
-	sprintf(temp,"%sdefault/predict.db",DATADIR);
+	sprintf(temp,"%spredict.db",DATADIR);
 
 	if (CopyFile(temp,dbfile))
 		printw("\n\n  *** ERROR: Could not copy default DB file from \"%s\"!", temp);
 
-	sprintf(temp,"%sdefault/predict.qth",DATADIR);
+	sprintf(temp,"%spredict.qth",DATADIR);
 
 	if (CopyFile(temp,qthfile))
 		printw("\n\n  *** ERROR: Could not copy default QTH file from \"%s\"!", temp);
