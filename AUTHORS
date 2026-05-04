@@ -1,0 +1,50 @@
+Authors of predict-ng
+=====================
+
+Original Author
+---------------
+John A. Magliacane, KD2BD <kd2bd@amsat.org>
+  Lead developer of PREDICT, the satellite tracking and orbital prediction
+  program on which predict-ng is based.
+
+Contributors to the original PREDICT
+-------------------------------------
+Ivan Galysh, KD4HBO <galysh@juno.nrl.navy.mil>
+  Socket-based server code and the "map" client application (2000).
+
+Vittorio Benvenuti, I3VFJ <benscosm@iol.it>
+  PIC/TRACK serial port antenna rotator control code (2000).
+
+Neoklis Kyriazis, 5B4AZ
+  SGP4/SDP4 orbital models and sun/moon position algorithms (satcom-08, 2002),
+  derived from FORTRAN/Pascal code by Dr. T.S. Kelso.
+
+Xavier Crehueras, EB3CZS
+  The "gsat" client application.
+
+Rich Parry, W9IF
+  Perl client demonstration program.
+
+Steve Fraser, VK5ASF
+  WinPredictClient.
+
+Wade Hampton
+  Original concept of using "xearth" as a graphical display (earthtrack).
+
+Lapo Pieri, IK5NAX
+  Squint angle calculations (trk-0.4.1).
+
+Bent Bagger, OZ6BL
+Tom Busch, WB8WOR
+Takeshi Okazaki (MTSAT-1R / HIMAWARI 6)
+  Code contributions.
+
+Joeal Subash
+  QuickDoppler feature.
+
+predict-ng Maintainer
+---------------------
+Costin Stroie, YO3JAZ <yo3jaz@eridu.eu.org>
+  Modernization: build system (configure/Makefile), kepupdate rewrite,
+  SIGHUP live reload, East-positive longitude convention, elimination of
+  generated predict.h, vocalizer integration, man page updates.
