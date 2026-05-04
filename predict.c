@@ -5992,6 +5992,9 @@ char *string, *outputfile;
 				}
 			}
 
+			fprintf(fd,"%-10s %-19s %4s %4s %4s %4s %4s %6s %6s %s\n",
+				"Timestamp","UTC Date/Time","El","Az","MA","Lat","Lon","Range","Orbit","Sun");
+
 			if ((start>=now-31557600) && (start<=now+31557600) && end==0)
 			{
 				/* Start must be one year from now */
@@ -6204,6 +6207,8 @@ char *string, *outputfile;
 					daynum=FindAOS();
 
 					/* Display the pass */
+					fprintf(fd,"%-10s %-19s %4s %4s %4s %4s %4s %6s %6s %s %s\n",
+						"Timestamp","UTC Date/Time","El","Az","MA","Lat","Lon","Range","Orbit","Sun","Doppler100");
 
 					while (iel>=0)
 					{
