@@ -2536,7 +2536,7 @@ char *predict_name;
   }
 }
 
-void Banner()
+void PrepareHeader()
 {
   curs_set(0);
   bkgdset(COLOR_PAIR(3));
@@ -2544,14 +2544,25 @@ void Banner()
   refresh();
 
   attrset(COLOR_PAIR(6) | A_BOLD);
-  mvprintw(4, 1, "--== predict-ng  v%s ==--", VERSION);
-  mvprintw(5, 1, "Original by John A. Magliacane, KD2BD");
-  mvprintw(6, 1, "Maintained by Costin Stroie, YO3JAZ");
+  for (int i = 0; i < 4; i++)
+    mvhline(i, 0, ' ', COLS);
+}
+
+void Banner()
+{
+  PrepareHeader();
+  for (int i = 4; i < 8; i++)
+    mvhline(i, 0, ' ', COLS);
+	int xo = (COLS > 80) ? (COLS - 80) / 2 : 0;
+  mvprintw(4, 26 + xo, "--== predict-ng  v%s ==--", VERSION);
+  mvprintw(5, 21 + xo, "Original by John A. Magliacane, KD2BD");
+  mvprintw(6, 22 + xo, "Maintained by Costin Stroie, YO3JAZ");
 }
 
 void AnyKey()
 {
-  mvprintw(23, 1, "<< Press Any Key To Continue >>");
+	int xo = (COLS > 80) ? (COLS - 80) / 2 : 0;
+  mvprintw(23, 1 + xo, "<< Press Any Key To Continue >>");
   refresh();
   getch();
 }
@@ -6015,28 +6026,29 @@ void MainMenu()
 
   Banner();
   attrset(COLOR_PAIR(4) | A_BOLD);
-  mvprintw(10, 1, "--==[ Main Menu ]==--");
+  int xo = (COLS > 80) ? (COLS - 80) / 2 : 0;
+	mvprintw(10, 30 + xo, "--==[ Main Menu ]==--");
 
   attrset(COLOR_PAIR(3) | A_BOLD);
-  mvprintw(13, 1, "[P]: Predict Satellite Passes");
-  mvprintw(14, 1, "[V]: Predict Visible Passes");
-  mvprintw(15, 1, "[S]: Solar Illumination Predictions");
-  mvprintw(16, 1, "[L]: Lunar Predictions");
-  mvprintw(17, 1, "[O]: Solar Predictions");
-  mvprintw(18, 1, "[T]: Single Satellite Tracking Mode");
-  mvprintw(19, 1, "[M]: Multi-Satellite Tracking Mode");
+  mvprintw(13, 1 + xo, "[P]: Predict Satellite Passes");
+  mvprintw(14, 1 + xo, "[V]: Predict Visible Passes");
+  mvprintw(15, 1 + xo, "[S]: Solar Illumination Predictions");
+  mvprintw(16, 1 + xo, "[L]: Lunar Predictions");
+  mvprintw(17, 1 + xo, "[O]: Solar Predictions");
+  mvprintw(18, 1 + xo, "[T]: Single Satellite Tracking Mode");
+  mvprintw(19, 1 + xo, "[M]: Multi-Satellite Tracking Mode");
 
-  mvprintw(13, 40, "[I]: Program Information");
-  mvprintw(14, 40, "[G]: Edit Ground Station Information");
-  mvprintw(15, 40, "[D]: Display Satellite Orbital Data");
-  mvprintw(16, 40, "[U]: Update Sat Elements From File");
-  mvprintw(17, 40, "[E]: Manually Edit Orbital Elements");
-  mvprintw(18, 40, "[B]: Edit Transponder Database");
-  mvprintw(19, 40, "[Q]: Exit PREDICT");
+  mvprintw(13, 40 + xo, "[I]: Program Information");
+  mvprintw(14, 40 + xo, "[G]: Edit Ground Station Information");
+  mvprintw(15, 40 + xo, "[D]: Display Satellite Orbital Data");
+  mvprintw(16, 40 + xo, "[U]: Update Sat Elements From File");
+  mvprintw(17, 40 + xo, "[E]: Manually Edit Orbital Elements");
+  mvprintw(18, 40 + xo, "[B]: Edit Transponder Database");
+  mvprintw(19, 40 + xo, "[Q]: Exit PREDICT");
 
   if (socket_flag) {
     attrset(COLOR_PAIR(4) | A_BOLD);
-    mvprintw(22, 33, "Server Mode");
+    mvprintw(22, 33 + xo, "Server Mode");
   }
 
   refresh();
