@@ -1,4 +1,4 @@
-.TH PREDICT 1 "05 May 2018" "KD2BD Software" "KD2BD Software"
+.TH PREDICT 1 "04 May 2026" "KD2BD Software" "KD2BD Software"
 .SH NAME
 predict \- Track and predict passes of satellites in Earth orbit
 
@@ -37,9 +37,9 @@ named \fI.predict\fP. First time users will be prompted to supply
 option \fB[G]\fP from the program's main menu) the first time the
 program is run. Latitude is normally expressed in degrees north with
 latitudes south of the equator expressed in negative degrees. Longitude
-is normally expressed in degrees west with eastern longitudes expressed
+is normally expressed in degrees east with western longitudes expressed
 in negative degrees. This behavior can be modified by passing the
-\fI-east\fP or \fI-south\fP commmand line switches to \fBPREDICT\fP.
+\fI-west\fP or \fI-south\fP command line switches to \fBPREDICT\fP.
 
 Latitudes and longitudes may be either entered in decimal degrees, or
 in degrees, minutes, seconds (DMS) format.  Station altitude is entered
@@ -57,8 +57,8 @@ the program's database, or by selecting option \fB[U]\fP and specifying
 a file containing recent 2-line Keplerian element data sets that
 correspond to the satellites in the program's database.  Keplerian
 orbital data is available from a variety of sources, including
-\fIhttp://www.celestrak.com/\fP, \fIhttp://www.space-track.org/\fP,
-and \fIhttp://www.amsat.org/\fP.
+\fIhttps://celestrak.org/\fP, \fIhttps://www.space-track.org/\fP,
+and \fIhttps://www.amsat.org/\fP.
 
 .SH PROGRAM OPERATION
 The start-up screen of \fBPREDICT\fP lists the program's main functions.
@@ -228,7 +228,7 @@ the program's database are tracked simultaneously along with the positions
 of the Sun and Moon. Tracking data for the satellites is displayed in
 two columns of 12 satellites each. The name, azimuth heading, elevation,
 sub-satellite point latitude (in degrees North) and longitude (in degrees
-West) positions are provided, along with the slant range distance between
+East) positions are provided, along with the slant range distance between
 the satellite and the ground station (in kilometers).
 
 A letter displayed to the right of the slant range indicates the satellite's
@@ -286,14 +286,10 @@ not the upper or lower limb, as is sometimes done when predicting
 the rising and setting times of these celestial objects.
 
 .SH OPERATION UNDER THE X-WINDOW SYSTEM
-\fBPREDICT\fP may be run under the X-Window System by invoking it through
-the \fIxpredict\fP script contained with this software. \fIxpredict\fP
-can invoke \fIrxvt\fP, \fIxterm\fP, \fIEterm\fP, \fIgnome-terminal\fP,
-or \fIkvt\fP, and display \fBPREDICT\fP in a virtual terminal window.
-\fIxpredict\fP should be edited for best results.  In many cases,
-holding down the SHIFT key while pressing the plus (+) and minus (-)
-keys allows \fBPREDICT's\fP window to be re-sized when started under
-\fIxpredict\fP.
+\fBPREDICT\fP may be run under any X-Window terminal emulator such as
+\fIrxvt\fP, \fIxterm\fP, \fIgnome-terminal\fP, or \fIkonsole\fP.
+In many cases, holding down the SHIFT key while pressing the plus (+)
+and minus (-) keys allows the terminal window to be re-sized.
 
 .SH COMMAND LINE ARGUMENTS
 By default, \fBPREDICT\fP reads ground station location and orbital
@@ -361,19 +357,16 @@ These options permit the automatic update of \fBPREDICT's\fP orbital
 data files using Keplerian orbital data obtained through automatic
 means such as FTP, HTTP, or pacsat satellite download.
 
-For example, the following script can be used to update \fBPREDICT's\fP
-orbital database via the Internet:
+The \fBkepupdate\fP script installed with \fBPREDICT\fP automates this
+process. It fetches current TLE data from Celestrak for the amateur,
+visual, weather, and stations groups, merges each file into the default
+database via \fIpredict -u\fP, and then sends SIGHUP to any running
+\fBPREDICT\fP instance to trigger a live reload. Simply run:
 
-   \fC#!/bin/sh
-   wget -qr www.celestrak.com/NORAD/elements/amateur.txt -O amateur.txt
-   wget -qr www.celestrak.com/NORAD/elements/visual.txt -O visual.txt
-   wget -qr www.celestrak.com/NORAD/elements/weather.txt -O weather.txt
-   /usr/local/bin/predict -u amateur.txt visual.txt weather.txt\fR
+	\fIkepupdate\fP
 
-To truly automate the process of updating your orbital database, save the
-above commands to a file in your home directory (such as \fIkepupdate\fP),
-and add the following line to your crontab (type \fIcrontab -e\fP to edit
-your crontab):
+To automate daily updates, add the following line to your crontab
+(type \fIcrontab -e\fP to edit):
 
 	\fI0 2 * * * kepupdate\fP
 
@@ -476,7 +469,7 @@ When either the \fI-f\fP or \fI-p\fP options are used, \fBPREDICT\fP
 produces an output consisting of the date/time in Unix format, the
 date and time in ASCII (UTC), the elevation of the satellite in
 degrees, the azimuth of the satellite in degrees, the orbital phase
-(modulo 256), the latitude (N) and longitude (W) of the satellite's
+(modulo 256), the latitude (N) and longitude (E) of the satellite's
 sub-satellite point, the slant range to the satellite (in kilometers),
 the orbit number, and the spacecraft's sunlight visibility information.
 For example:
@@ -712,7 +705,7 @@ Detailed information on the operation of \fBPREDICT's\fP UDP socket-based
 interface as well as sample code for writing your own client applications
 is available in the \fIpredict/clients/samples\fP subdirectory.  The latest
 news is available through the official \fBPREDICT\fP software web page
-located at: <http://www.qsl.net/kd2bd/predict.html>.
+located at: <https://github.com/kd2bd/predict>.
 .SH FILES
 .TP
 \fC~/.predict/predict.tle\fR
