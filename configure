@@ -118,7 +118,7 @@ install: all
 	install -m 755 predict \$(PREFIX)/bin/predict
 	install -m 755 kepupdate \$(PREFIX)/bin/kepupdate
 	install -d \$(PREFIX)/share/man/man1
-	install -m 644 predict.1 \$(PREFIX)/share/man/man1/predict.1
+	install -m 644 predict.man \$(PREFIX)/share/man/man1/predict.1
 	install -d \$(DATADIR)
 	install -m 644 default/predict.tle \$(DATADIR)
 	install -m 644 default/predict.db \$(DATADIR)
@@ -140,16 +140,6 @@ ${VOCALIZER_UNINSTALL}
 clean:
 	rm -f predict predict.1
 ${VOCALIZER_CLEAN}
-
-distclean: clean
-	rm -f vocalizer
-	rm -f clients/samples/demo
-	rm -f clients/map/map
-	rm -f clients/earthtrack/earthtrack
-	rm -f clients/kep_reload/kep_reload
-	rm -f utils/moontracker/moontracker
-	rm -f utils/geosat/geosat
-	\$(MAKE) -C clients/gsat-1.1.0 clean 2>/dev/null || true
 EOF
 echo "Generated Makefile"
 
