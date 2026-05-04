@@ -2362,11 +2362,11 @@ void Banner()
 	clear();
 	refresh();
 
-	attrset(COLOR_PAIR(6)|A_REVERSE|A_BOLD);
+	attrset(COLOR_PAIR(6)|A_BOLD);
 	mvprintw(3,18,"                                           ");
-	mvprintw(4,18,"         --== PREDICT  v%s ==--         ",VERSION);
-	mvprintw(5,18,"   Released by John A. Magliacane, KD2BD   ");
-	mvprintw(6,18,"                  May 2018                 ");
+	mvprintw(4,18,"       --== predict-ng  v%s ==--        ",VERSION);
+	mvprintw(5,18,"   Original by John A. Magliacane, KD2BD   ");
+	mvprintw(6,18,"      Maintained by Costin Stroie, YO3JAZ  ");
 	mvprintw(7,18,"                                           ");
 }
 
@@ -4115,9 +4115,9 @@ char *string, mode;
 				printw("\n");
 
 			if (fd==NULL)
-				mvprintw(23,63,"        ");
+				mvprintw(23,COLS-17,"        ");
 			else
-				mvprintw(23,63,"Log = ON");
+				mvprintw(23,COLS-17,"Log = ON");
 
 			mvprintw(23,6,"More? [y/n] >> ");
 			curs_set(1);
@@ -4162,7 +4162,7 @@ char *string, mode;
 					fd=fopen(temp,"a");
 					fprintf(fd,"%s%s%s\n",head1,head2,head3);
 					fprintf(fd,"%s",buffer);
-					mvprintw(23,63,"Log = ON");
+					mvprintw(23,COLS-17,"Log = ON");
 					move(23,21);
 					refresh();
 				}
@@ -4174,7 +4174,7 @@ char *string, mode;
 						fprintf(fd,"%s\n\n",buffer);
 						fclose(fd);
 						fd=NULL;
-						mvprintw(23,63,"        ");
+						mvprintw(23,COLS-17,"        ");
 						move(23,21);
 						refresh();
 					}
@@ -4962,12 +4962,12 @@ char speak;
 	bkgdset(COLOR_PAIR(3));
 	clear();
 
-	attrset(COLOR_PAIR(6)|A_REVERSE|A_BOLD);
+	attrset(COLOR_PAIR(6)|A_BOLD);
 
-	printw("                                                                                ");
-	printw("                     PREDICT Real-Time Satellite Tracking                        ");
-	printw("                 Tracking: %-10sOn                                       ",Abbreviate(sat[x].name,9));
-	printw("                                                                                 ");
+	mvprintw(0,0,"%-*s",COLS,"");
+	mvprintw(1,(COLS-46)/2,"predict-ng: Real-Time Satellite Tracking");
+	mvprintw(2,(COLS-30)/2,"Tracking: %-10s",Abbreviate(sat[x].name,9));
+	mvprintw(3,0,"%-*s",COLS,"");
 
 	attrset(COLOR_PAIR(4)|A_BOLD);
 
@@ -4992,9 +4992,9 @@ char speak;
 
 	do
 	{
-		attrset(COLOR_PAIR(6)|A_REVERSE|A_BOLD);
+		attrset(COLOR_PAIR(6)|A_BOLD);
 		daynum=CurrentDaynum();
-		mvprintw(2,41,"%s",Daynum2String(daynum));
+		mvprintw(2,(COLS-19)/2,"%s",Daynum2String(daynum));
 		attrset(COLOR_PAIR(2)|A_BOLD);
 		Calc();
 
@@ -5441,13 +5441,13 @@ void MultiTrack()
 		fprintf(stderr,"\033]0;PREDICT: Multi-Satellite Tracking Mode\007");
 
 	curs_set(0);
-	attrset(COLOR_PAIR(6)|A_REVERSE|A_BOLD);
+	attrset(COLOR_PAIR(6)|A_BOLD);
 	clear();
 
-	printw("                                                                                ");
-	printw("                     PREDICT Real-Time Multi-Tracking Mode                      ");
-	printw("                    Current Date/Time:                                          ");
-	printw("                                                                                ");
+	mvprintw(0,0,"%-*s",COLS,"");
+	mvprintw(1,(COLS-40)/2,"predict-ng: Real-Time Multi-Tracking Mode");
+	mvprintw(2,(COLS-20)/2,"Current Date/Time:");
+	mvprintw(3,0,"%-*s",COLS,"");
 
 	attrset(COLOR_PAIR(2)|A_REVERSE);
 
@@ -5614,7 +5614,7 @@ void MultiTrack()
 			}
  		}
 
-		attrset(COLOR_PAIR(6)|A_REVERSE|A_BOLD);
+		attrset(COLOR_PAIR(6)|A_BOLD);
 
 		daynum=CurrentDaynum();
 		mvprintw(2,39,"%s",Daynum2String(daynum));
@@ -6674,7 +6674,7 @@ char argc, *argv[];
 		init_pair(3,COLOR_YELLOW,COLOR_BLUE);
 		init_pair(4,COLOR_CYAN,COLOR_BLUE);
 		init_pair(5,COLOR_WHITE,COLOR_RED);
-		init_pair(6,COLOR_RED,COLOR_WHITE);
+		init_pair(6,COLOR_WHITE,COLOR_RED);
 		init_pair(7,COLOR_CYAN,COLOR_RED);
 
 		if (x<3)
