@@ -6,9 +6,8 @@ predict
 vocalizer
 predict.1
 
-# Other compiled binaries
-utils/geosat/geosat
-utils/moontracker/moontracker
+# Temporary files
+*~
 
 # Claude's files
 .claude
