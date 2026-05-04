@@ -5887,15 +5887,18 @@ void NewUser()
 
 	sprintf(temp,"%sdefault/predict.tle",DATADIR);
 
-	CopyFile(temp,tlefile);
+	if (CopyFile(temp,tlefile))
+		printw("\n\n  *** ERROR: Could not copy default TLE file from \"%s\"!", temp);
 
 	sprintf(temp,"%sdefault/predict.db",DATADIR);
 
-	CopyFile(temp,dbfile);
+	if (CopyFile(temp,dbfile))
+		printw("\n\n  *** ERROR: Could not copy default DB file from \"%s\"!", temp);
 
 	sprintf(temp,"%sdefault/predict.qth",DATADIR);
 
-	CopyFile(temp,qthfile);
+	if (CopyFile(temp,qthfile))
+		printw("\n\n  *** ERROR: Could not copy default QTH file from \"%s\"!", temp);
 
 	attrset(COLOR_PAIR(4)|A_BOLD);
 	AnyKey();
@@ -6599,7 +6602,8 @@ char argc, *argv[];
 		if (db==NULL)
 		{
 			sprintf(temp,"%sdefault/predict.db",DATADIR);
-			CopyFile(temp,dbfile);
+			if (CopyFile(temp,dbfile))
+				fprintf(stderr,"*** ERROR: Could not copy default DB file from \"%s\"!\n",temp);
 		}
 
 		else
