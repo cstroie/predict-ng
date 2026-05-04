@@ -1,7 +1,7 @@
 /***************************************************************************\
-*          PREDICT: A satellite tracking/orbital prediction program         *
+*        PREDICT-NG: A satellite tracking/orbital prediction program        *
 *          Project started 26-May-1991 by John A. Magliacane, KD2BD         *
-*                        Last update: 04-May-2018                           *
+*             Last update: 04-May-2026 by Costin Stroie, YO3JAZ             *
 *****************************************************************************
 *                                                                           *
 * This program is free software; you can redistribute it and/or modify it   *
@@ -15,7 +15,7 @@
 * General Public License for more details.                                  *
 *                                                                           *
 *****************************************************************************
-*          See the "CREDITS" file for the names of those who have           *
+*   See the "CREDITS" and "AUTHORS" files for the names of those who have   *
 *   generously contributed their time, talent, and effort to this project.  *
 \***************************************************************************/
 
@@ -38,7 +38,7 @@
 #include <sys/stat.h>
 
 #ifndef VERSION
-#define VERSION "unknown"
+#define VERSION "DEVEL"
 #endif
 
 #ifndef DATADIR
@@ -2365,16 +2365,14 @@ void Banner()
 	refresh();
 
 	attrset(COLOR_PAIR(6)|A_BOLD);
-	mvprintw(3,18,"                                           ");
-	mvprintw(4,18,"       --== predict-ng  v%s ==--        ",VERSION);
-	mvprintw(5,18,"   Original by John A. Magliacane, KD2BD   ");
-	mvprintw(6,18,"     Maintained by Costin Stroie, YO3JAZ   ");
-	mvprintw(7,18,"                                           ");
+	mvprintw(4,1,"--== predict-ng  v%s ==--",VERSION);
+	mvprintw(5,1,"Original by John A. Magliacane, KD2BD");
+	mvprintw(6,1,"Maintained by Costin Stroie, YO3JAZ");
 }
 
 void AnyKey()
 {
-	mvprintw(23,24,"<< Press Any Key To Continue >>");
+	mvprintw(23,1,"<< Press Any Key To Continue >>");
 	refresh();
 	getch();
 }
@@ -3037,12 +3035,12 @@ char *string;
 			echo();
 
 			for (i=5; i<8; i+=2)
-				mvprintw(i,19,"------------------------------------------");
+				mvprintw(i,1,"------------------------------------------");
 
-			mvprintw(6,19,"* Keplerian Database Auto Update Utility *");
+			mvprintw(6,1,"* Keplerian Database Auto Update Utility *");
 			bkgdset(COLOR_PAIR(2));
-			mvprintw(19,18,"Enter NASA Two-Line Element Source File Name");
-			mvprintw(13,18,"-=> ");
+			mvprintw(19,1,"Enter NASA Two-Line Element Source File Name");
+			mvprintw(13,1,"-=> ");
 			refresh();
 			wgetnstr(stdscr,filename,49);
 			clear();
@@ -3226,20 +3224,20 @@ int Select()
 	clear();
 
 	bkgdset(COLOR_PAIR(2)|A_BOLD);
-	printw("\n\n\t\t\t      Select a Satellite:\n\n");
+	mvprintw(2,1,"Select a Satellite:");
 
 	attrset(COLOR_PAIR(3)|A_BOLD);
 
 	for (x=0, y=8, z=16; y<16; ++x, ++y, ++z)
 	{
-		printw("\n\t[%c]: %-15s", x+'A', Abbreviate(sat[x].name,15));
-		printw("\t[%c]: %-15s", y+'A', Abbreviate(sat[y].name,15));
-		printw("\t[%c]: %-15s\n", z+'A', Abbreviate(sat[z].name,15));
+		mvprintw(4+x, 1, "[%c]: %-15s", x+'A', Abbreviate(sat[x].name,15));
+		mvprintw(4+x,28, "[%c]: %-15s", y+'A', Abbreviate(sat[y].name,15));
+		mvprintw(4+x,55, "[%c]: %-15s", z+'A', Abbreviate(sat[z].name,15));
 	}
 
 	attrset(COLOR_PAIR(4)|A_BOLD);
 
-	printw("\n\n\t\t<< Enter Selection  -  Press [ESC] To Exit >>");
+	mvprintw(14,1,"<< Enter Selection  -  Press [ESC] To Exit >>");
 	refresh();
 
 	do
@@ -3351,13 +3349,13 @@ char mode;
 		clear();
 
 		if (mode=='m')
-			printw("\n\n\n\t     Starting UTC Date and Time for Predictions of the Moon\n\n");
+			mvprintw(3,1,"Starting UTC Date and Time for Predictions of the Moon");
 
 		if (mode=='o')
-			printw("\n\n\n\t     Starting UTC Date and Time for Predictions of the Sun\n\n");
+			mvprintw(3,1,"Starting UTC Date and Time for Predictions of the Sun");
 
 		if (mode!='m' && mode!='o')
-			printw("\n\n\n\t     Starting UTC Date and Time for Predictions of %-15s\n\n",sat[indx].name);
+			mvprintw(3,1,"Starting UTC Date and Time for Predictions of %-15s",sat[indx].name);
 
 		bozo_count++;
 
@@ -3367,11 +3365,11 @@ char mode;
 			string[x-4]=string[x];
 
 		attrset(COLOR_PAIR(4)|A_BOLD);
-		printw("\t\t    Format: %s -or- ",string);
+		mvprintw(5,1,"Format: %s -or- ",string);
 		string[7]=0;
 		printw("%s",string);
 		attrset(COLOR_PAIR(2)|A_BOLD);
-		mvprintw(21,30,"Default is `NOW'");
+		mvprintw(21,1,"Default is `NOW'");
 		attrset(COLOR_PAIR(3)|A_BOLD);
 		mvprintw(13,1,"Enter Start Date & Time >> ");
 		curs_set(1);
@@ -4116,9 +4114,9 @@ char *string, mode;
 				printw("\n");
 
 			if (fd==NULL)
-				mvprintw(23,COLS-17,"        ");
+				mvprintw(23,63,"        ");
 			else
-				mvprintw(23,COLS-17,"Log = ON");
+				mvprintw(23,63,"Log = ON");
 
 			mvprintw(23,6,"More? [y/n] >> ");
 			curs_set(1);
@@ -4163,7 +4161,7 @@ char *string, mode;
 					fd=fopen(temp,"a");
 					fprintf(fd,"%s%s%s\n",head1,head2,head3);
 					fprintf(fd,"%s",buffer);
-					mvprintw(23,COLS-17,"Log = ON");
+					mvprintw(23,63,"Log = ON");
 					move(23,21);
 					refresh();
 				}
@@ -4175,7 +4173,7 @@ char *string, mode;
 						fprintf(fd,"%s\n\n",buffer);
 						fclose(fd);
 						fd=NULL;
-						mvprintw(23,COLS-17,"        ");
+						mvprintw(23,63,"        ");
 						move(23,21);
 						refresh();
 					}
@@ -4674,7 +4672,7 @@ void KepEdit()
 		{
 			bkgdset(COLOR_PAIR(3)|A_BOLD);
 			clear();
-			mvprintw(3,1,"\t\t   *  Orbital Database Editing Utility  *\n\n\n");
+			mvprintw(3,1,"*  Orbital Database Editing Utility  *\n\n\n");
 			attrset(COLOR_PAIR(4)|A_BOLD);
 
 			printw("\n\t\t\tSpacecraft Name :");
@@ -4809,7 +4807,7 @@ void QthEdit()
 	bkgdset(COLOR_PAIR(3)|A_BOLD);
 	clear();
 	curs_set(1);
-	mvprintw(7,0,"\t\t *  Ground Station Location Editing Utility  *\n\n\n");
+	mvprintw(7,1,"*  Ground Station Location Editing Utility  *\n\n\n");
 
 	attrset(COLOR_PAIR(4)|A_BOLD);
 	printw("\n\t\t\tStation Callsign  :");
@@ -4869,7 +4867,7 @@ void QthEdit()
 	if (io_lon=='W')
 		mvprintw(18,12,"Enter your longitude in degrees WEST   (east=positive) ");
 	else
-		mvprintw(18,12,"Enter your longitude in degrees EAST   (west=negative, 0-360 or -180 to 180) ");
+		mvprintw(18,12,"Enter your longitude in degrees EAST   (west=negative) ");
  
 	if (KbEdit(45,14))
 	{
@@ -4968,10 +4966,10 @@ char speak;
 
 	attrset(COLOR_PAIR(6)|A_BOLD);
 
-	mvprintw(0,0,"%-*s",COLS,"");
-	mvprintw(1,(COLS-46)/2,"predict-ng: Real-Time Satellite Tracking");
-	mvprintw(2,(COLS-30)/2,"Tracking: %-10s",Abbreviate(sat[x].name,9));
-	mvprintw(3,0,"%-*s",COLS,"");
+	mvhline(0,0,' ',80);
+	mvprintw(1,1,"predict-ng: Real-Time Satellite Tracking");
+	mvprintw(2,1,"Tracking: %-10s",Abbreviate(sat[x].name,9));
+	mvhline(3,0,' ',80);
 
 	attrset(COLOR_PAIR(4)|A_BOLD);
 
@@ -4998,7 +4996,7 @@ char speak;
 	{
 		attrset(COLOR_PAIR(6)|A_BOLD);
 		daynum=CurrentDaynum();
-		mvprintw(2,(COLS-19)/2,"%s",Daynum2String(daynum));
+		mvprintw(2,42,"%s",Daynum2String(daynum));
 		attrset(COLOR_PAIR(2)|A_BOLD);
 		Calc();
 
@@ -5448,10 +5446,10 @@ void MultiTrack()
 	attrset(COLOR_PAIR(6)|A_BOLD);
 	clear();
 
-	mvprintw(0,0,"%-*s",COLS,"");
-	mvprintw(1,(COLS-40)/2,"predict-ng: Real-Time Multi-Tracking Mode");
-	mvprintw(2,(COLS-20)/2,"Current Date/Time:");
-	mvprintw(3,0,"%-*s",COLS,"");
+	mvhline(0,0,' ',80);
+	mvprintw(1,1,"predict-ng: Real-Time Multi-Tracking Mode");
+	mvprintw(2,1,"Current Date/Time:");
+	mvhline(3,0,' ',80);
 
 	xo=(COLS>80)?(COLS-80)/2:0;
 
@@ -5788,7 +5786,7 @@ void MainMenu()
 
 	Banner();
 	attrset(COLOR_PAIR(4)|A_BOLD);
-	mvprintw(10,28,"--==[ Main Menu ]==--");
+	mvprintw(10,1,"--==[ Main Menu ]==--");
 
 	attrset(COLOR_PAIR(3)|A_BOLD);
 	mvprintw(13,1,"[P]: Predict Satellite Passes");
