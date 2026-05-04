@@ -6029,6 +6029,123 @@ char *string, *outputfile;
 	return 0;
 }
 
+int QuickPasses(outputfile)
+char *outputfile;
+{
+	/* List all passes for all satellites in the next 24 hours, sorted by AOS. */
+
+	struct pass_entry {
+		double aos;
+		double los;
+		double maxel;
+		int    sat;
+	};
+
+	struct pass_entry passes[24*48]; /* generous upper bound */
+	int    npass=0, i, j;
+	double now, limit, aos, los, maxel, step;
+	time_t t;
+	FILE  *fd;
+
+	if (outputfile[0])
+		fd=fopen(outputfile,"w");
+	else
+		fd=stdout;
+
+	t=time(NULL);
+	now=((double)t/86400.0)-3651.0;
+	limit=now+1.0; /* 24 hours */
+
+	ReadDataFiles();
+
+	for (i=0; i<24; i++)
+	{
+		if (sat[i].meanmo==0.0)
+			continue;
+		if (!AosHappens(i) || Geostationary(i) || Decayed(i,now))
+			continue;
+
+		indx=i;
+		daynum=now;
+		PreCalc(indx);
+		Calc();
+
+		/* if already in range, jump past current pass first */
+		if (sat_ele>=0.0)
+			daynum=NextAOS();
+		else
+			daynum=FindAOS();
+
+		while (daynum<limit && daynum>0.0)
+		{
+			aos=daynum;
+
+			/* walk the pass to find max elevation */
+			Calc();
+			maxel=sat_ele;
+			while (sat_ele>=0.0)
+			{
+				if (sat_ele>maxel) maxel=sat_ele;
+				step=cos((sat_ele-1.0)*deg2rad)*sqrt(sat_alt)/25000.0;
+				if (step<0.000002) step=0.000002;
+				daynum+=step;
+				Calc();
+			}
+
+			los=FindLOS();
+			if (los<=aos) break; /* safety */
+
+			if (aos<limit && npass<(int)(sizeof(passes)/sizeof(passes[0])))
+			{
+				passes[npass].aos=aos;
+				passes[npass].los=(los<limit?los:limit);
+				passes[npass].maxel=maxel;
+				passes[npass].sat=i;
+				npass++;
+			}
+
+			/* jump to next pass */
+			daynum=los+0.014; /* ~20 minutes past LOS */
+			Calc();
+			daynum=FindAOS();
+		}
+	}
+
+	/* sort by AOS (insertion sort) */
+	for (i=1; i<npass; i++)
+	{
+		struct pass_entry tmp=passes[i];
+		j=i-1;
+		while (j>=0 && passes[j].aos>tmp.aos)
+		{
+			passes[j+1]=passes[j];
+			j--;
+		}
+		passes[j+1]=tmp;
+	}
+
+	/* print header */
+	fprintf(fd,"%-25s  %-18s  %-18s  %s\n","Satellite","AOS (UTC)","LOS (UTC)","MaxEl");
+	fprintf(fd,"%-25s  %-18s  %-18s  %s\n","-------------------------","------------------","------------------","-----");
+
+	for (i=0; i<npass; i++)
+	{
+		fprintf(fd,"%-25s  %-18s  %-18s  %5.1f\n",
+			sat[passes[i].sat].name,
+			Daynum2String(passes[i].aos),
+			Daynum2String(passes[i].los),
+			passes[i].maxel);
+	}
+
+	if (npass==0)
+		fprintf(fd,"No passes found in the next 24 hours.\n");
+
+	if (outputfile[0])
+		fclose(fd);
+
+	return 0;
+}
+
 int QuickPredict(string, outputfile)
 char *string, *outputfile;
 {
@@ -6214,6 +6331,7 @@ char argc, *argv[];
 	int x, y, z, key=0;
 	char updatefile[80], quickfind=0, quickpredict=0,
 	     quickstring[40], outputfile[42], quickdoppler100=0,
+	     quickpasses=0,
 	     tle_cli[50], qth_cli[50], interactive=0;
 	struct termios oldtty, newtty;
 	pthread_t thread;
@@ -6298,6 +6416,9 @@ char argc, *argv[];
 			z--;
 		}
 
+		if (strcmp(argv[x],"-P")==0)
+			quickpasses=1;
+
 		if (strcmp(argv[x],"-u")==0)
 		{
 			z=x+1;
@@ -6381,10 +6502,11 @@ char argc, *argv[];
 			printf("  -q <qthfile>     Use alternate QTH file\n\n");
 			printf("Non-interactive modes:\n");
 			printf("  -u <file> [...]  Update orbital database from TLE file(s) and exit\n");
+			printf("  -P               List all passes in the next 24h (sorted by AOS)\n");
 			printf("  -f <sat> <start> [end]  Satellite position(s) at Unix time(s)\n");
 			printf("  -p <sat> [start]        Single-pass orbital prediction\n");
 			printf("  -dp <sat> [start] [end] Quick Doppler prediction (CSV)\n");
-			printf("  -o <file>        Write -f/-p/-dp output to file\n\n");
+			printf("  -o <file>        Write output to file\n\n");
 			printf("Server mode:\n");
 			printf("  -s               Start in UDP socket server mode\n");
 			printf("  -n <port>        Use alternate UDP port (default: 1210)\n\n");
@@ -6424,7 +6546,7 @@ char argc, *argv[];
 	/* Test for interactive/non-interactive mode of operation
 	   based on command-line arguments given to PREDICT. */
 
-	if (updatefile[0] || quickfind || quickpredict || quickdoppler100)
+	if (updatefile[0] || quickfind || quickpredict || quickdoppler100 || quickpasses)
 		interactive=0;
 	else
 		interactive=1;
@@ -6496,6 +6618,9 @@ char argc, *argv[];
 
 		if (quickdoppler100)  /* -dp was passed to PREDICT */
 			exit(QuickDoppler100(quickstring,outputfile));
+
+		if (quickpasses)  /* -P was passed to PREDICT */
+			exit(QuickPasses(outputfile));
 	}
 
 	else
