@@ -13,8 +13,8 @@ LIBS     = -lm -lncurses -lpthread
 # Requires /dev/dsp (OSS soundcard)
 ifdef VOCALIZER
   ifneq ($(wildcard /dev/dsp),)
-    SOUNDCARD       = 1
-    VOCALIZER_BIN   = vocalizer
+    SOUNDCARD        = 1
+    VOCALIZER_BIN    = vocalizer
     VOCALIZER_CFLAGS = -DVOCALIZERDIR='"$(DATADIR)sounds/"'
   else
     $(warning /dev/dsp not found — vocalizer will not be built)

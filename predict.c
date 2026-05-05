@@ -5403,7 +5403,7 @@ char speak;
 
           if ((old_visibility == 'V' || old_visibility == 'D')
               && visibility == 'N') {
-            sprintf(command, "%svocalizer/vocalizer eclipse &", DATADIR);
+            sprintf(command, "vocalizer eclipse &");
             system(command);
             eclipse_alarm = 1;
             oldtime -= 0.000015 * sqrt(sat_alt);
@@ -5411,7 +5411,7 @@ char speak;
 
           if (old_visibility == 'N'
               && (visibility == 'V' || visibility == 'D')) {
-            sprintf(command, "%svocalizer/vocalizer sunlight &", DATADIR);
+            sprintf(command, "vocalizer sunlight &");
             system(command);
             eclipse_alarm = 1;
             oldtime -= 0.000015 * sqrt(sat_alt);
@@ -5425,9 +5425,8 @@ char speak;
           if (sat_range_rate > 0.0)
             approaching = '-';
 
-          sprintf(command,
-                  "%svocalizer/vocalizer %.0f %.0f %c %c &",
-                  DATADIR, sat_azi, sat_ele, approaching, visibility);
+          sprintf(command, "vocalizer %.0f %.0f %c %c &",
+                  sat_azi, sat_ele, approaching, visibility);
           system(command);
           oldtime = CurrentDaynum();
           old_visibility = visibility;
@@ -5540,7 +5539,7 @@ char speak;
       if (oldtime != 0.0 && speak == 'T' && SOUNDCARD) {
         /* Announce LOS */
 
-        sprintf(command, "%svocalizer/vocalizer los &", DATADIR);
+        sprintf(command, "vocalizer los &");
         system(command);
       }
     }
