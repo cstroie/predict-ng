@@ -15,7 +15,7 @@ ifdef VOCALIZER
   ifneq ($(wildcard /dev/dsp),)
     SOUNDCARD       = 1
     VOCALIZER_BIN   = vocalizer
-    VOCALIZER_CFLAGS = -DVOCALIZERDIR='"$(DATADIR)vocalizer/"'
+    VOCALIZER_CFLAGS = -DVOCALIZERDIR='"$(DATADIR)sounds/"'
   else
     $(warning /dev/dsp not found — vocalizer will not be built)
     SOUNDCARD = 0
@@ -49,8 +49,8 @@ install: all
 	install -m 644 default/predict.qth $(DATADIR)
 ifdef VOCALIZER_BIN
 	install -m 755 vocalizer $(PREFIX)/bin/vocalizer
-	install -d $(DATADIR)vocalizer
-	install -m 644 vocalizer/*.wav $(DATADIR)vocalizer/
+	install -d $(DATADIR)sounds
+	install -m 644 sounds/*.wav $(DATADIR)sounds/
 endif
 
 uninstall:

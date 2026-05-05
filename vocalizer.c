@@ -29,7 +29,7 @@
 #include <sys/soundcard.h>
 
 #ifndef VOCALIZERDIR
-#define VOCALIZERDIR "/usr/local/share/predict/vocalizer/"
+#define VOCALIZERDIR "/usr/local/share/predict/sounds/"
 #endif
 
 int dsp;
