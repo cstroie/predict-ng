@@ -6336,7 +6336,9 @@ char *outputfile;
     while (daynum < limit && daynum > 0.0) {
       aos = daynum;
 
-      /* walk the pass to find max elevation */
+      /* walk the pass to find max elevation;
+         advance past FindAOS() boundary (sat_ele may be slightly negative) */
+      daynum += 0.000694;       /* step ~1 minute into pass */
       Calc();
       maxel = sat_ele;
       while (sat_ele >= 0.0) {
@@ -6381,16 +6383,19 @@ char *outputfile;
   }
 
   /* print header */
-  fprintf(fd, "%-25s  %-18s  %-18s  %s\n", "Satellite", "AOS (UTC)",
+  fprintf(fd, "%-25s  %-20s  %-20s  %s\n", "Satellite", "AOS (UTC)",
           "LOS (UTC)", "MaxEl");
-  fprintf(fd, "%-25s  %-18s  %-18s  %s\n", "-------------------------",
-          "------------------", "------------------", "-----");
+  fprintf(fd, "%-25s  %-20s  %-20s  %s\n", "-------------------------",
+          "--------------------", "--------------------", "-----");
 
   for (i = 0; i < npass; i++) {
-    fprintf(fd, "%-25s  %-18s  %-18s  %5.1f\n",
-            sat[passes[i].sat].name,
-            Daynum2String(passes[i].aos),
-            Daynum2String(passes[i].los), passes[i].maxel);
+    char aos_str[25], los_str[25];
+    strncpy(aos_str, Daynum2String(passes[i].aos), sizeof(aos_str) - 1);
+    aos_str[sizeof(aos_str) - 1] = '\0';
+    strncpy(los_str, Daynum2String(passes[i].los), sizeof(los_str) - 1);
+    los_str[sizeof(los_str) - 1] = '\0';
+    fprintf(fd, "%-25s  %-20s  %-20s  %5.1f\n",
+            sat[passes[i].sat].name, aos_str, los_str, passes[i].maxel);
   }
 
   if (npass == 0)
