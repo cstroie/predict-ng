@@ -81,9 +81,49 @@ triggering a live reload of the orbital database without restarting.
 | `~/.predict/predict.db`  | Satellite transponder database |
 | `~/.predict/predict.qth` | Ground station location |
 
+## Command-Line Options
+
+| Option | Description |
+|--------|-------------|
+| `-P [sat]` | List all passes in the next 24 hours, sorted by AOS. Optional satellite name or catalog number filters to a single satellite. |
+| `-p sat [time]` | Predict the next single pass for a satellite from a given Unix start time (default: now). |
+| `-f sat start [end]` | Print satellite position(s) at a given time or over a time range. |
+| `-dp sat [start [end]]` | Like `-f` but outputs 100 MHz Doppler shift in CSV format. |
+| `-u file ...` | Update the orbital database from one or more TLE files, then exit. |
+| `-t tlefile` | Use an alternate TLE file. |
+| `-q qthfile` | Use an alternate QTH file. |
+| `-o file` | Write output to a file instead of stdout. |
+| `-e deg` | Set minimum elevation threshold (default 0°). |
+| `-s` | Start in UDP server mode (port 1210). |
+| `-n port` | Use an alternate UDP port for server mode. |
+| `-a port` | Send AZ/EL tracking data to a serial port (EasyComm 2). |
+| `-a1 port` | Like `-a` but sends keepalives at least once per second. |
+
+### Examples
+
+List all passes in the next 24 hours:
+```
+predict -P
+```
+
+List only ISS passes in the next 24 hours:
+```
+predict -P ISS
+```
+
+List passes above 10° elevation:
+```
+predict -P -e 10
+```
+
+Predict the next pass for OSCAR-11:
+```
+predict -p OSCAR-11
+```
+
 ## Documentation
 
-See `man predict` after installation, or `docs/man/predict.man` in the source tree.
+See `man predict` after installation, or `predict.man` in the source tree.
 
 ## Authors
 

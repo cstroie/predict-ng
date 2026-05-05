@@ -6286,10 +6286,10 @@ char *string, *outputfile;
   return 0;
 }
 
-int QuickPasses(outputfile)
-char *outputfile;
+int QuickPasses(outputfile, filter)
+char *outputfile, *filter;
 {
-  /* List all passes for all satellites in the next 24 hours, sorted by AOS. */
+  /* List passes for all (or one filtered) satellite in the next 24 hours, sorted by AOS. */
 
   struct pass_entry {
     double aos;
@@ -6317,6 +6317,9 @@ char *outputfile;
 
   for (i = 0; i < 24; i++) {
     if (sat[i].meanmo == 0.0)
+      continue;
+    if (filter[0] && strcmp(sat[i].name, filter) != 0
+        && atol(filter) != sat[i].catnum)
       continue;
     if (!AosHappens(i) || Geostationary(i) || Decayed(i, now))
       continue;
@@ -6618,7 +6621,8 @@ char argc, *argv[];
   int x, y, z, key = 0;
   char updatefile[80], quickfind = 0, quickpredict = 0,
       quickstring[40], outputfile[42], quickdoppler100 = 0,
-      quickpasses = 0, tle_cli[50], qth_cli[50], interactive = 0;
+      quickpasses = 0, tle_cli[50], qth_cli[50], interactive = 0,
+      quickpass_filter[50];
   struct termios oldtty, newtty;
   pthread_t thread;
   char *env = NULL;
@@ -6636,6 +6640,7 @@ char argc, *argv[];
   temp[0] = 0;
   tle_cli[0] = 0;
   qth_cli[0] = 0;
+  quickpass_filter[0] = 0;
   dbfile[0] = 0;
   netport[0] = 0;
   serial_port[0] = 0;
@@ -6692,8 +6697,12 @@ char argc, *argv[];
       z--;
     }
 
-    if (strcmp(argv[x], "-P") == 0)
+    if (strcmp(argv[x], "-P") == 0) {
       quickpasses = 1;
+      z = x + 1;
+      if (z <= y && argv[z][0] && argv[z][0] != '-')
+        strncpy(quickpass_filter, argv[z], 49);
+    }
 
     if (strcmp(argv[x], "-e") == 0) {
       z = x + 1;
@@ -6896,7 +6905,7 @@ char argc, *argv[];
       exit(QuickDoppler100(quickstring, outputfile));
 
     if (quickpasses)            /* -P was passed to PREDICT */
-      exit(QuickPasses(outputfile));
+      exit(QuickPasses(outputfile, quickpass_filter));
   }
 
   else {

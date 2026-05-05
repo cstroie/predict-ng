@@ -1,4 +1,4 @@
-.TH PREDICT-NG 1 "04 May 2026" "predict-ng" "predict-ng"
+.TH PREDICT-NG 1 "05 May 2026" "predict-ng" "predict-ng"
 .SH NAME
 predict \- Track and predict passes of satellites in Earth orbit
 
@@ -9,6 +9,7 @@ predict [-u \fItle_update_source\fP] [-t \fItlefile\fP]
 [-f \fIsat_name starting_date/time ending_date/time\fP]
 [-dp \fIsat_name starting_date/time ending_date/time\fP]
 [-p \fIsat_name starting_date/time\fP]
+[-P [\fIsat_name_or_number\fP]]
 [-o \fIoutput_file\fP] [-s] [-east] [-west] [-north] [-south]
 
 .SH DESCRIPTION
@@ -525,6 +526,24 @@ where the Unix time is followed by the UTC date/time and
 100 MHz downlink-referenced Doppler shift.  The satellite
 name can be followed by a starting date/time and ending
 date/time much like the \fI-f\fP option.
+
+.SH QUICK PASS LIST
+The \fI-P\fP option prints a chronological list of all satellite passes
+expected within the next 24 hours, sorted by AOS, then exits.  Each line
+shows the satellite name, AOS time (UTC), LOS time (UTC), and maximum
+elevation in degrees:
+
+	\fIpredict -P\fP
+
+To restrict the output to a single satellite, supply its name or NORAD
+catalog number as the next argument:
+
+	\fIpredict -P ISS\fP
+	\fIpredict -P 25544\fP
+
+Only passes whose maximum elevation meets or exceeds the minimum elevation
+threshold (set with \fI-e\fP) are listed.  The output may be redirected
+to a file with the \fI-o\fP option.
 
 .SH SERVER MODE
 \fBPREDICT's\fP network socket interface allows the program to

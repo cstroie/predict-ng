@@ -40,6 +40,20 @@ SIGHUP live reload
   A running predict instance now reloads predict.tle, predict.qth,
   and predict.db from disk in response to SIGHUP, without restarting.
 
+-P quick pass list with optional satellite filter
+  predict -P prints all passes in the next 24 hours, sorted by AOS.
+  An optional satellite name or catalog number can be appended to show
+  only passes for that satellite:
+
+    predict -P
+    predict -P ISS
+    predict -P 25544
+
+Vocalizer binary path fixed
+  The vocalizer is now invoked by name ("vocalizer") rather than by a
+  path constructed from DATADIR, matching where make install puts the
+  binary (/usr/local/bin/vocalizer).
+
 ----------------------------------------------------------------------------
 
 PREDICT 2.2.0  (October 2002)

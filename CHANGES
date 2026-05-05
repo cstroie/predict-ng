@@ -38,9 +38,18 @@ By Costin Stroie, YO3JAZ <yo3jaz@eridu.eu.org> (04-May-2026):
   instance reloads its orbital and ground station data in response
   to SIGHUP, without restarting.
 
+* Added -P command-line option (QuickPasses): prints a chronological
+  list of all passes in the next 24 hours, sorted by AOS, then exits.
+  Accepts an optional satellite name or NORAD catalog number to filter
+  output to a single satellite (predict -P ISS, predict -P 25544).
+
+* Fixed vocalizer invocation: predict now calls "vocalizer" by name
+  rather than constructing a path from DATADIR, matching the location
+  where make install places the binary (/usr/local/bin/vocalizer).
+
 * Man page (predict.1) updated: longitude convention, removed xpredict
-  references, updated Celestrak URLs, documented kepupdate, updated
-  authors section.
+  references, updated Celestrak URLs, documented kepupdate, documented
+  -P option, updated authors section.
 
 * Added AUTHORS file listing all contributors.
 
